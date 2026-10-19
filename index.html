@@ -1184,24 +1184,26 @@ header.top { max-width: 100%; }
 /* panneau d'ajout rapide */
 .addsheet { position: fixed; inset: 0; z-index: 60; background: rgba(20, 18, 16, .38); display: none; }
 .addsheet.open { display: block; }
-.addpanel { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sheet); color: var(--ink); border-radius: 22px 22px 0 0; padding: 10px max(18px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); max-height: 85%; overflow: auto; box-shadow: 0 -10px 30px -12px rgba(0,0,0,.3); }
-@media (min-width: 701px) { .addpanel { left: 50%; right: auto; width: 520px; transform: translateX(-50%); bottom: 24px; border-radius: 22px; } }
-.addgrip { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 10px; }
-.addhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.addhead b { font-family: var(--f-serif); font-weight: 500; font-size: 22px; }
-.addclose { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--deep); }
-.addgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.addgrid button { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border-radius: 14px; background: var(--soft); text-align: left; min-width: 0; color: var(--ink); }
-.addgrid button .ai { width: 36px; height: 36px; border-radius: 50%; background: var(--sheet); display: grid; place-items: center; color: var(--acc); flex: none; font-size: 17px; }
-.addgrid button b { display: block; font-weight: 600; font-size: 14.5px; line-height: 1.2; }
-.addgrid button small { display: block; font-size: 12px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+.addpanel { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sheet); color: var(--ink); border-radius: 14px 14px 0 0; padding: 10px max(18px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); max-height: 85%; overflow: auto; box-shadow: 0 -10px 30px -12px rgba(0,0,0,.3); }
+@media (min-width: 701px) { .addpanel { left: 50%; right: auto; width: 520px; transform: translateX(-50%); bottom: 24px; border-radius: 14px; } }
+.addgrip { width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 12px; }
+.addhead { position: sticky; top: -10px; z-index: 1; background: var(--sheet); display: flex; align-items: center; justify-content: space-between; padding: 6px 0 12px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
+.addhead b { font-family: var(--f-serif); font-weight: 500; font-size: 21px; letter-spacing: .01em; }
+.addclose { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); display: grid; place-items: center; color: var(--deep); font-size: 15px; }
+.addsub { font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 18px 2px 8px; }
+.addgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.addgrid button { display: flex; align-items: center; gap: 11px; padding: 11px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--sheet); text-align: left; min-width: 0; color: var(--ink); transition: background .15s, border-color .15s; }
+.addgrid button .ai { width: 32px; height: 32px; border-radius: 7px; background: var(--soft); display: grid; place-items: center; color: var(--acc); flex: none; font-size: 16px; }
+.addgrid button b { display: block; font-weight: 600; font-size: 14px; line-height: 1.25; letter-spacing: .005em; }
+.addgrid button small { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.3; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .addgrid button span:last-child { min-width: 0; }
 .addgrid button:last-child:nth-child(odd) { grid-column: 1 / -1; }
-.addsub { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 20px 2px 10px; }
 .addnav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.addnav button { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); font-size: 12.5px; line-height: 1.2; text-align: center; min-width: 0; overflow-wrap: anywhere; }
-.addnav button .ai { font-size: 18px; color: var(--acc); }
-.addnav button.on { background: var(--soft); border-color: transparent; }
+.addnav button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 64px; padding: 10px 4px 9px; border-radius: 8px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); font-size: 12px; font-weight: 500; letter-spacing: .01em; line-height: 1.2; text-align: center; min-width: 0; overflow-wrap: anywhere; transition: background .15s, border-color .15s; }
+.addnav button .ai { font-size: 17px; color: var(--acc); line-height: 0; }
+.addnav button.on { background: var(--soft); border-color: var(--acc); }
+.addgrid button:active, .addnav button:active { background: var(--soft); }
+@media (hover: hover) { .addgrid button:hover, .addnav button:hover { border-color: var(--acc); } }
 @media (min-width: 701px) { .addnav { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .sechead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .sechead .lab, .sechead > div > * { margin-bottom: 0 !important; }
@@ -1288,7 +1290,7 @@ img, video, canvas, svg { max-width: 100%; }
   </div>
 </div>
 <nav class="bottombar" id="bottombar" aria-label="Navigation"></nav>
-<div class="addsheet" id="addsheet" aria-hidden="true"><div class="addpanel" role="dialog" aria-modal="true" aria-labelledby="addsheet-t"><div class="addgrip"></div><div class="addhead"><b id="addsheet-t">Ajouter</b><button type="button" class="addclose" data-addclose="1" aria-label="Fermer"></button></div><div class="addgrid" id="addgrid"></div><div class="addsub">Aller à</div><div class="addnav" id="addnav"></div></div></div>
+<div class="addsheet" id="addsheet" aria-hidden="true"><div class="addpanel" role="dialog" aria-modal="true" aria-labelledby="addsheet-t"><div class="addgrip"></div><div class="addhead"><b id="addsheet-t">Ajouter</b><button type="button" class="addclose" data-addclose="1" aria-label="Fermer"></button></div><div class="addsub">Créer</div><div class="addgrid" id="addgrid"></div><div class="addsub">Aller à</div><div class="addnav" id="addnav"></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="penpop" id="penpop" role="menu" aria-label="Couleur du stylo"></div>
 <input type="file" id="file-photo" accept="image/*" hidden>
@@ -2319,14 +2321,14 @@ try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =
 function addItems() {
   const t = inRange(TODAY) ? TODAY : D0;
   const L = [
-    ['note', 'notes', 'Note', 'Une page de notes lignées', 'notes', { go: 'n_lignes', focus: 1 }],
-    ['tache', 'todo', 'Tâche du jour', 'Dans les priorités d’aujourd’hui', null, { go: 'd-' + t, focus: /priorit|à faire/i }],
-    ['idee', 'brain', 'Idée / vide-tête', 'Tout noter, trier ensuite', 'vie', { go: 'braindump', focus: 1 }],
-    ['rdv', 'calendar', 'Rendez-vous', 'Avec date, heure et alerte', 'rappels', { rnew: 'rdv' }],
-    ['anniv', 'cake', 'Anniversaire', 'Rappel chaque année', 'rappels', { rnew: 'anniv' }],
-    ['rappel', 'bell', 'Rappel', 'Paiement, santé, autre…', 'rappels', { rnew: 'autre' }],
-    ['contact', 'userplus', 'Contact', 'Dans le répertoire', 'contacts', { cnew: 1 }],
-    ['depense', 'finances', 'Dépense', 'Suivi de chaque achat', 'finances', { go: 'depenses', focus: 1 }],
+    ['note', 'notes', 'Note', 'Page lignée', 'notes', { go: 'n_lignes', focus: 1 }],
+    ['tache', 'todo', 'Tâche', 'Pour aujourd’hui', null, { go: 'd-' + t, focus: /priorit|à faire/i }],
+    ['idee', 'brain', 'Idée', 'Vide-tête', 'vie', { go: 'braindump', focus: 1 }],
+    ['rdv', 'calendar', 'Rendez-vous', 'Date et heure', 'rappels', { rnew: 'rdv' }],
+    ['anniv', 'cake', 'Anniversaire', 'Chaque année', 'rappels', { rnew: 'anniv' }],
+    ['rappel', 'bell', 'Rappel', 'Paiement, santé…', 'rappels', { rnew: 'autre' }],
+    ['contact', 'userplus', 'Contact', 'Répertoire', 'contacts', { cnew: 1 }],
+    ['depense', 'finances', 'Dépense', 'Suivi des achats', 'finances', { go: 'depenses', focus: 1 }],
     ['photo', 'camera', 'Photo du jour', 'Un souvenir en image', 'album', { go: 'alb_jour' }]
   ];
   return L.filter(x => !x[4] || isOn(x[4]));

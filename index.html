@@ -1151,6 +1151,11 @@ header.top { max-width: 100%; }
 .tools { flex: none; }
 .tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
 .card.secedit { cursor: default; }
+.sechead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sechead .lab, .sechead > div > * { margin-bottom: 0 !important; }
+.secedit-btn { flex: none; font: inherit; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--deep) 35%, transparent); background: transparent; color: var(--deep); line-height: 1.2; position: relative; }
+.secedit-btn::before { content: ""; position: absolute; inset: -8px -4px; }
+.secedit-btn.on { background: var(--deep); color: var(--sheet); border-color: var(--deep); }
 .secbtns { display: flex; gap: 6px; flex: none; }
 .secb { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--deep); font-size: 15px; display: grid; place-items: center; flex: none; }
 .secb:disabled { opacity: .3; }
@@ -1317,7 +1322,7 @@ const secList = () => secOrderOf(allCards().filter(x => isOn(x[0])));
 let secEdit = false;
 function secBlock() {
   const list = secList();
-  const head = `<div style="display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="btn" data-secedit="1" style="flex:none">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
+  const head = `<div class="sechead"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="secedit-btn${secEdit ? ' on' : ''}" data-secedit="1">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
   if (!secEdit) return `<div class="blk" style="margin-top:24px">${head}<div class="secgrid">${list.map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${esc(t)}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
   const hidden = SECTIONS.filter(x => !isOn(x[0]));
   const extra = (S.settings.secExtra || []);

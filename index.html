@@ -662,6 +662,7 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 .cact a:hover { background: var(--soft); }
 .cact.big a { width: 46px; height: 46px; font-size: 19px; background: var(--soft); border-color: transparent; }
 .bdrow { gap: 12px; padding: 7px 0; cursor: pointer; align-items: center !important; }
+.tdg.done .bdn { text-decoration: line-through; color: var(--muted); } .tdg .ck { margin: 0 9px; flex: none; } .tdgest .bdn { min-width: 0; overflow-wrap: anywhere; }
 .bdrow .bdn { flex: 1; font-size: 15px; } .bdrow .bdn small { color: var(--muted); } .bdrow .bdd { font-size: 12px; color: var(--acc); font-weight: 500; letter-spacing: .04em; white-space: nowrap; }
 .bsel select, .bsel input { border: 0; border-bottom: 1px solid var(--rule, var(--line)); background: transparent; padding: 8px 2px; font-size: 15px; outline: none; color: var(--write, var(--ink)); }
 .bsel input { width: 150px; }
@@ -1580,6 +1581,7 @@ V.index = () => {
   let h = `<div class="ph profile"><div class="prof"><div class="avatar" data-avatar="1" role="button" tabindex="0" aria-label="${av ? 'Changer la photo de profil' : 'Ajouter une photo de profil'}">${av ? `<img src="${av}" alt="">` : `<span>${ic('camera')}<small>Photo</small></span>`}</div><div><div class="caps eyebrow">Sommaire · agenda 2027 – 2028</div><h1><input type="text" class="owner" id="owner" value="${esc(own)}" placeholder="Votre prénom" size="${Math.max(own.length, 11)}" maxlength="40" autocomplete="given-name" aria-label="Prénom"></h1></div></div></div>`;
   if (TODAY < D0) h += `<div class="count" style="margin-bottom:24px"><div><div class="caps">Avant le premier jour</div><b>J-${Math.round((parse(D0) - parse(TODAY)) / 864e5)}</b></div><button class="btn" type="button" data-go="yg-2027">${ic('goals')} Préparer mes objectifs 2027</button></div>`;
   else if (inRange(TODAY)) h += `<div class="count" style="margin-bottom:24px"><div><div class="caps">Aujourd’hui</div><b>${fmtDay(TODAY)}</b></div><button class="btn" type="button" data-go="d-${TODAY}">${ic('day')} Ouvrir ma journée</button></div>`;
+  h += todayDigest();
   { const t0 = inRange(TODAY) ? TODAY : D0; const rr = []; for (let i = 0; i < 7 && rr.length < 5; i++) remOn(add(t0, i)).forEach(r => rr.push([i, r])); if (rr.length) h += `<div class="blk" style="margin-bottom:24px">${lab({ l: 'Mes rappels de la semaine', ic: 'bell' })}${rr.slice(0, 5).map(([i, r]) => `<div class="ln bdrow" data-go="rappel-${r.id}"><span class="rico">${remIcon(r)}</span><span class="bdn">${esc(r.title || 'Rappel')}${r.time ? ` <small>· ${r.time.replace(':', 'h')}</small>` : ''}</span><span class="bdd">${i === 0 ? 'Aujourd’hui' : i === 1 ? 'Demain' : `dans ${i} jours`}</span></div>`).join('')}<div class="chips"><button type="button" data-go="rappels">Tous mes rappels</button></div></div>`; }
   { const up = upcoming(30); h += `<div class="blk" style="margin-bottom:24px">${lab({ l: 'Anniversaires à venir', ic: 'cake' })}${up.length ? up.slice(0, 5).map(b => `<div class="ln bdrow" data-go="contact-${b.c.id}">${cAvatar(b.c)}<span class="bdn">${esc(cName(b.c))}${b.age != null && b.age > 0 ? ` <small>· ${b.age} ans</small>` : ''}</span><span class="bdd">${b.i === 0 ? 'Aujourd’hui' : b.i === 1 ? 'Demain' : `dans ${b.i} jours`}</span></div>`).join('') : `<p class="hint" style="margin:6px 0 0">Aucun anniversaire dans les 30 prochains jours.</p>`}<div class="chips"><button type="button" data-go="contacts">Ouvrir le répertoire</button></div></div>`; }
   h += `<div class="blk">${lab({ l: 'Année', ic: 'year' })}`;
@@ -2184,6 +2186,33 @@ function onRemInput(t) {
   if (t.classList.contains('ta')) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
 }
 document.addEventListener('change', e => { if (e.target.dataset && e.target.dataset.rk) onRemInput(e.target); });
+function dayDigest(d) {
+  const o = S.p['d-' + d] || {}, v = k => typeof o[k] === 'string' ? o[k].trim() : '';
+  const pri = [], tasks = [], plan = [];
+  [/^lb1\.\d+$/, /^rpr\.\d+$/, /^lpr\.\d+$/, /^p1$/].forEach(re => Object.keys(o).filter(k => re.test(k)).sort().forEach(k => { const t = v(k); if (t && !pri.includes(t)) pri.push(t); }));
+  Object.keys(o).filter(k => /^(ltd|rtd|td)\.\d+$/.test(k) && v(k)).sort((a, b) => a.localeCompare(b, 'fr', { numeric: true })).forEach(k => tasks.push({ k, t: v(k), done: !!o[k + 'c'] }));
+  Object.keys(o).filter(k => /^rs\.\d+h?$/.test(k) && v(k)).sort((a, b) => (parseInt(a.slice(3)) + (a.endsWith('h') ? .5 : 0)) - (parseInt(b.slice(3)) + (b.endsWith('h') ? .5 : 0))).forEach(k => { const m = k.match(/^rs\.(\d+)(h?)$/); plan.push({ h: `${m[1]}h${m[2] ? '30' : ''}`, t: v(k) }); });
+  return { ev: (DATA.ev && DATA.ev[d]) || [], rem: isOn('rappels') ? remOn(d) : [], bd: bdaysOn(d), pri, tasks, plan };
+}
+function todayDigest() {
+  const d = inRange(TODAY) ? TODAY : D0, x = dayDigest(d);
+  const row = (icon, txt, sub, attrs) => `<div class="ln bdrow tdg"${attrs || ''}><span class="rico">${icon}</span><span class="bdn">${txt}</span>${sub ? `<span class="bdd">${sub}</span>` : ''}</div>`;
+  let r = '';
+  x.ev.forEach(e => r += row(ic('calendar'), esc(e[0]), e[1] ? 'Férié' : 'Événement'));
+  x.rem.slice().sort((a, b) => (a.time || '99').localeCompare(b.time || '99')).forEach(m => r += row(remIcon(m), esc(m.title || 'Rappel') + (m.lieu ? ` <small>· ${esc(m.lieu)}</small>` : ''), m.time ? m.time.replace(':', 'h') : 'Rappel', ` data-go="rappel-${m.id}"`));
+  x.bd.forEach(b => r += row(ic('cake'), 'Anniversaire de ' + esc(bdayLabel(b)), '', ` data-go="contact-${b.c.id}"`));
+  x.plan.forEach(p => r += row(ic('day'), esc(p.t), p.h, ` data-go="d-${d}"`));
+  x.pri.forEach(p => r += row(ic('star'), esc(p), 'Priorité', ` data-go="d-${d}"`));
+  x.tasks.forEach(t => r += `<div class="ln bdrow tdg${t.done ? ' done' : ''}"><input type="checkbox" class="ck" data-tdone="${d}|${t.k}" ${t.done ? 'checked' : ''} aria-label="Fait : ${esc(t.t)}"><span class="bdn">${esc(t.t)}</span><span class="bdd">${t.done ? 'Fait' : 'À faire'}</span></div>`);
+  const nb = x.rem.length + x.bd.length + x.plan.length + x.pri.length + x.tasks.filter(t => !t.done).length;
+  return `<div class="blk tdgest" style="margin-bottom:24px">${lab({ l: d === TODAY ? 'Au programme aujourd’hui' : 'Au programme du 1er jour (' + fmtDay(d) + ')', ic: 'day' })}${r || '<p class="hint" style="margin:6px 0 10px">Rien de prévu pour l’instant. Ajoutez un rappel ou remplissez votre journée : tout s’affichera ici.</p>'}<div class="chips"><button type="button" data-go="d-${d}">Ouvrir la journée${nb ? ` · ${nb}` : ''}</button>${isOn('rappels') ? `<button type="button" data-rnew="rdv" data-date="${d}">+ Rappel</button>` : ''}</div></div>`;
+}
+document.addEventListener('change', e => {
+  const t = e.target.closest && e.target.closest('[data-tdone]'); if (!t) return;
+  const [d, k] = t.dataset.tdone.split('|'); const pk = 'd-' + d;
+  (S.p[pk] = S.p[pk] || {})[k + 'c'] = t.checked; persist();
+  t.closest('.tdg').classList.toggle('done', t.checked);
+});
 function todayBanner(d) {
   const rs = remOn(d), bs = bdaysOn(d);
   return `<div class="todayb"><div class="todayh"><span class="caps">${d === TODAY ? 'Aujourd’hui' : 'Ce jour-là'}</span><button type="button" class="tb-add" data-rnew="rdv" data-date="${d}">${ic('plus')} Rappel</button></div>${rs.length || bs.length ? `<div class="todayl">${rs.map(r => `<button type="button" data-go="rappel-${r.id}">${remIcon(r)} ${esc(remLabel(r))}${r.lieu ? ` <small>· ${esc(r.lieu)}</small>` : ''}</button>`).join('')}${bs.map(b => `<button type="button" data-go="contact-${b.c.id}">${ic('cake')} Anniversaire de ${esc(bdayLabel(b))}</button>`).join('')}</div>` : '<p class="hint" style="margin:4px 0 0">Aucun rendez-vous ni anniversaire.</p>'}</div>`;

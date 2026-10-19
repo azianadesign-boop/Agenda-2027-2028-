@@ -1197,6 +1197,12 @@ header.top { max-width: 100%; }
 .addgrid button small { display: block; font-size: 12px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
 .addgrid button span:last-child { min-width: 0; }
 .addgrid button:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.addsub { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 20px 2px 10px; }
+.addnav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.addnav button { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); font-size: 12.5px; line-height: 1.2; text-align: center; min-width: 0; overflow-wrap: anywhere; }
+.addnav button .ai { font-size: 18px; color: var(--acc); }
+.addnav button.on { background: var(--soft); border-color: transparent; }
+@media (min-width: 701px) { .addnav { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .sechead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .sechead .lab, .sechead > div > * { margin-bottom: 0 !important; }
 .secedit-btn { flex: none; font: inherit; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--deep) 35%, transparent); background: transparent; color: var(--deep); line-height: 1.2; position: relative; }
@@ -1282,7 +1288,7 @@ img, video, canvas, svg { max-width: 100%; }
   </div>
 </div>
 <nav class="bottombar" id="bottombar" aria-label="Navigation"></nav>
-<div class="addsheet" id="addsheet" aria-hidden="true"><div class="addpanel" role="dialog" aria-modal="true" aria-labelledby="addsheet-t"><div class="addgrip"></div><div class="addhead"><b id="addsheet-t">Ajouter</b><button type="button" class="addclose" data-addclose="1" aria-label="Fermer"></button></div><div class="addgrid" id="addgrid"></div></div></div>
+<div class="addsheet" id="addsheet" aria-hidden="true"><div class="addpanel" role="dialog" aria-modal="true" aria-labelledby="addsheet-t"><div class="addgrip"></div><div class="addhead"><b id="addsheet-t">Ajouter</b><button type="button" class="addclose" data-addclose="1" aria-label="Fermer"></button></div><div class="addgrid" id="addgrid"></div><div class="addsub">Aller à</div><div class="addnav" id="addnav"></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="penpop" id="penpop" role="menu" aria-label="Couleur du stylo"></div>
 <input type="file" id="file-photo" accept="image/*" hidden>
@@ -1839,8 +1845,11 @@ function chrome() {
   $('#bottombar').innerHTML = [['Jour', 'day', `d-${today}`, 'day'], ['Semaine', 'week', `wa-${weekStart(cd)}`, 'week'], ['Ajouter', 'plus', '#add', 'add'], ['Mois', 'month', `m-${cd.slice(0, 7)}`, 'month'], ['Sommaire', 'layout', 'index', 'index']]
     .map(([l, i, k, s]) => k === '#add' ? `<button type="button" class="addbtn" data-addsheet="1" aria-label="Ajouter : note, tâche, rappel…"><span class="addcircle">${ic('plus')}</span>${l}</button>` : `<button type="button" data-go="${k}" class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
 }
+function navItems() {
+  return [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']].filter(x => isOn(x[0]));
+}
 function drawer() {
-  const items = [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']];
+  const items = navItems();
   $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
@@ -2326,6 +2335,7 @@ function addSheet(open) {
   const el = $('#addsheet'); if (!el) return;
   if (open) {
     $('#addgrid').innerHTML = addItems().map(([k, i, t, d, , a]) => `<button type="button" data-addact="${k}" ${a.rnew ? `data-rnew="${a.rnew}"` : ''} ${a.cnew ? 'data-cnew="1"' : ''}><span class="ai">${ic(i)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('');
+    $('#addnav').innerHTML = navItems().map(([k, l, i]) => `<button type="button" data-go="${k}" class="${PK === k ? 'on' : ''}"><span class="ai">${ic(i)}</span>${l}</button>`).join('');
     el.querySelector('.addclose').innerHTML = ic('x');
   }
   el.classList.toggle('open', !!open); el.setAttribute('aria-hidden', open ? 'false' : 'true');

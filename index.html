@@ -1153,6 +1153,10 @@ img, video, canvas, svg { max-width: 100%; }
 @media (max-width: 420px) { .brand b { letter-spacing: .14em; } .tools { gap: 4px; } }
 @media (max-width: 370px) { .brand b { letter-spacing: .08em; font-size: 9.5px; } .tools .tool { width: 30px; height: 30px; } }
 @media (max-width: 330px) { .brand { display: none; } }
+.prof > :first-child { flex: none; }
+.prof > div:not(:first-child) { min-width: 0; flex: 1 1 auto; }
+.prof .owner { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.prof .eyebrow { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>

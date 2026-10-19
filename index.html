@@ -1190,25 +1190,21 @@ img, video, canvas, svg { max-width: 100%; }
 .prof .owner { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
 .prof .eyebrow { overflow-wrap: anywhere; }
 
-/* ---------- en-tête et barre du bas aux couleurs du coloris ---------- */
-.top, .bottombar { background: var(--bar-bg, var(--tab)); border-color: var(--bar-line, var(--tab2)); }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bar-bg, var(--tab)); pointer-events: none; }
-.top .tool, .top .menu-btn { color: var(--bar-icon, var(--acc)); border-color: color-mix(in srgb, var(--bar-icon, var(--acc)) 40%, transparent); background: color-mix(in srgb, var(--sheet) 55%, transparent); }
-.top .nav button { color: var(--bar-icon, var(--muted)); }
-.top .nav button.on { color: var(--bar-ink, var(--deep)); }
-.top .tool:hover { background: var(--sheet); }
-:root[data-bar="dark"] .top :is(.tool, .menu-btn) { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .35); }
-:root[data-bar="dark"] .top .tool:hover { background: rgba(255, 255, 255, .16); }
-:root[data-bar="dark"] .top .pen-dot { box-shadow: 0 0 0 2px rgba(255, 255, 255, .9), 0 0 0 3px rgba(255, 255, 255, .35); }
-.top .brand b { color: var(--bar-ink, var(--deep)) !important; }
-.top .pen-dot { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 3px color-mix(in srgb, var(--acc) 55%, transparent); }
-.bottombar button { color: var(--bar-icon, var(--muted)) !important; }
-.bottombar button.on { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
-.bottombar button.on::before { background: var(--bar-ink, var(--acc)) !important; }
-/* coloris Noir : en-tête blanc et pictos noirs, pour rester graphique */
-
-
-.bottombar button:not(.on) .ic { opacity: .9; }
+/* ---------- en-tête et barre du bas aux couleurs du coloris (uniquement pour 6 coloris : Lavande, Sauge, Rose, Framboise, Demoiselle, Crépuscule) ---------- */
+:root[data-tint] :is(.top, .bottombar) { background: var(--bar-bg, var(--tab)); border-color: var(--bar-line, var(--tab2)); }
+:root[data-tint] body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bar-bg, var(--tab)); pointer-events: none; }
+:root[data-tint] .top :is(.tool, .menu-btn) { color: var(--bar-icon, var(--acc)); border-color: color-mix(in srgb, var(--bar-icon, var(--acc)) 40%, transparent); background: color-mix(in srgb, var(--sheet) 55%, transparent); }
+:root[data-tint] .top .nav button { color: var(--bar-icon, var(--muted)); }
+:root[data-tint] .top .nav button.on { color: var(--bar-ink, var(--deep)); }
+:root[data-tint] .top .tool:hover { background: var(--sheet); }
+:root[data-tint][data-bar="dark"] .top :is(.tool, .menu-btn) { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .35); }
+:root[data-tint][data-bar="dark"] .top .tool:hover { background: rgba(255, 255, 255, .16); }
+:root[data-tint][data-bar="dark"] .top .pen-dot { box-shadow: 0 0 0 2px rgba(255, 255, 255, .9), 0 0 0 3px rgba(255, 255, 255, .35); }
+:root[data-tint] .top .brand b { color: var(--bar-ink, var(--deep)) !important; }
+:root[data-tint] .top .pen-dot { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 3px color-mix(in srgb, var(--acc) 55%, transparent); }
+:root[data-tint] .bottombar button { color: var(--bar-icon, var(--muted)) !important; }
+:root[data-tint] .bottombar button.on { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
+:root[data-tint] .bottombar button.on::before { background: var(--bar-ink, var(--acc)) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
@@ -2178,10 +2174,17 @@ function wireSearch() {
   });
 }
 /* couleurs de l'en-tête et de la barre du bas : calculées pour rester lisibles sur chaque coloris */
+const TINTED = ['lavande', 'sauge', 'rose', 'framboise', 'demoiselle', 'crepuscule'];
 function syncBarColor() {
   try {
     const top = document.querySelector('header.top'); if (!top) return;
     const r = document.documentElement;
+    if (!TINTED.includes((S.settings || {}).coloris)) {
+      delete r.dataset.tint; delete r.dataset.bar; ['--bar-bg', '--bar-line', '--bar-ink', '--bar-icon'].forEach(v => r.style.removeProperty(v));
+      const m0 = document.getElementById('meta-theme'); if (m0) { const c0 = getComputedStyle(top).backgroundColor; m0.setAttribute('content', c0); }
+      return;
+    }
+    r.dataset.tint = '1';
     const cv = document.createElement('canvas'); cv.width = cv.height = 1; const x = cv.getContext('2d', { willReadFrequently: true });
     const rgb = c => { x.clearRect(0, 0, 1, 1); x.fillStyle = '#000'; x.fillStyle = c; x.fillRect(0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]]; };
     const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };

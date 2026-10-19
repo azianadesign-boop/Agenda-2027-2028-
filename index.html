@@ -1801,6 +1801,12 @@ function render() {
   const keepY = window.scrollY;
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
+  /* adresses hors agenda (année ≠ 2027/2028, mois ou date inexistants) : retour au sommaire */
+  { const yy = k.match(/^(?:y|ya|yg|yb|yq|m|mo|mf|mw|w[abr]|d)-(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/);
+    if (yy) { const Y = +yy[1], M = yy[2] ? +yy[2] : 1, D = yy[3] ? +yy[3] : 1, dt = new Date(Y, M - 1, D);
+      const real = dt.getFullYear() === Y && dt.getMonth() === M - 1 && dt.getDate() === D;
+      const okY = /^(?:w[abr])-/.test(k) ? (Y >= 2026 && Y <= 2028) : (Y === 2027 || Y === 2028);
+      if (!okY || (!/^yq-/.test(k) && !real)) k = 'index'; } }
   PK = k; let h = '', m;
   try {
     if (k === 'index') h = V.index();

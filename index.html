@@ -1193,17 +1193,18 @@ img, video, canvas, svg { max-width: 100%; }
 /* ---------- en-tête et barre du bas aux couleurs du coloris ---------- */
 .top, .bottombar { background: var(--tab); border-color: var(--tab2); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--tab); pointer-events: none; }
-.top .tool, .top .menu-btn { color: var(--acc); border-color: color-mix(in srgb, var(--acc) 45%, transparent); background: color-mix(in srgb, var(--sheet) 60%, transparent); }
+.top .tool, .top .menu-btn { color: var(--bar-icon, var(--acc)); border-color: color-mix(in srgb, var(--bar-icon, var(--acc)) 40%, transparent); background: color-mix(in srgb, var(--sheet) 55%, transparent); }
+.top .nav button { color: var(--bar-icon, var(--muted)); }
+.top .nav button.on { color: var(--bar-ink, var(--deep)); }
 .top .tool:hover { background: var(--sheet); }
-.top .brand b { color: var(--deep); }
+.top .brand b { color: var(--bar-ink, var(--deep)) !important; }
 .top .pen-dot { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 3px color-mix(in srgb, var(--acc) 55%, transparent); }
-.bottombar button { color: color-mix(in srgb, var(--acc) 85%, var(--deep)); }
-.bottombar button.on { color: var(--deep); }
-.bottombar button.on::before { background: var(--acc); }
+.bottombar button { color: var(--bar-icon, var(--muted)) !important; }
+.bottombar button.on { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
+.bottombar button.on::before { background: var(--bar-ink, var(--acc)) !important; }
 /* coloris Noir : en-tête blanc et pictos noirs, pour rester graphique */
 :root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) :is(.top, .bottombar), :root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) body::before { background: #FFFFFF; border-color: #1E1D1B; }
-:root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) :is(.top .tool, .top .menu-btn, .top .brand b, .bottombar button) { color: #1E1D1B; border-color: #1E1D1B; }
-:root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) .bottombar button:not(.on) { color: #7A7672; }
+
 .bottombar button:not(.on) .ic { opacity: .9; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
@@ -2173,15 +2174,27 @@ function wireSearch() {
     $('#res').innerHTML = s.length < 2 ? '<p class="hint">Tapez au moins deux lettres.</p>' : (out.length ? out.map(([pk, v]) => `<button type="button" data-go="${pk}"><b>${esc(titleOf(pk))}</b><small>${esc(v.slice(0, 120))}</small></button>`).join('') : '<p class="hint">Aucun résultat.</p>');
   });
 }
+/* couleurs de l'en-tête et de la barre du bas : calculées pour rester lisibles sur chaque coloris */
 function syncBarColor() {
   try {
     const top = document.querySelector('header.top'); if (!top) return;
-    let c = getComputedStyle(top).backgroundColor;
-    const cv = document.createElement('canvas'); cv.width = cv.height = 1; const x = cv.getContext('2d'); x.fillStyle = '#000'; x.fillStyle = c; x.fillRect(0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data;
-    c = '#' + [d[0], d[1], d[2]].map(v => v.toString(16).padStart(2, '0')).join('');
-    const m = document.getElementById('meta-theme'); if (m) m.setAttribute('content', c);
+    const r = document.documentElement;
+    const cv = document.createElement('canvas'); cv.width = cv.height = 1; const x = cv.getContext('2d', { willReadFrequently: true });
+    const rgb = c => { x.clearRect(0, 0, 1, 1); x.fillStyle = '#000'; x.fillStyle = c; x.fillRect(0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]]; };
+    const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };
+    const ratio = (a, b) => { const p = lum(a), q = lum(b); return (Math.max(p, q) + .05) / (Math.min(p, q) + .05); };
+    const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    const bg = rgb(getComputedStyle(top).backgroundColor);
+    const dark = lum(bg) < .2, toward = dark ? [255, 255, 255] : [20, 18, 17];
+    const fit = (c, min) => { for (let t = 0; t <= 1.0001; t += .04) { const m = c.map((v, i) => v + (toward[i] - v) * t); if (ratio(m, bg) >= min) return hex(m); } return hex(toward); };
+    const cs = getComputedStyle(r);
+    const acc = rgb(cs.getPropertyValue('--acc').trim() || '#8a7f74'), deep = rgb(cs.getPropertyValue('--deep').trim() || '#3a3330');
+    r.style.setProperty('--bar-ink', fit(dark ? acc : deep, 7));
+    r.style.setProperty('--bar-icon', fit(acc, 4.6));
+    const m = document.getElementById('meta-theme'); if (m) m.setAttribute('content', hex(bg));
   } catch (e) {}
 }
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
 function applySettings() {
   setTimeout(syncBarColor, 0);
   const st = S.settings; const r = document.documentElement;

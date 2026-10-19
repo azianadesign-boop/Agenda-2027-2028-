@@ -1145,10 +1145,18 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 /* ---------- adaptation à tous les écrans (Android compris) ---------- */
 /* sécurité anti-débordement posée sur le contenu seulement : rien sur html/body, que Safari iPhone gère mal avec la barre du bas fixe */
 .wrap { max-width: 100%; overflow-x: clip; }
-/* iPhone : quand Safari « rebondit » en bas de page, la barre du bas remonte un peu.
-   On supprime ce rebond et on prolonge la couleur de la barre vers le bas : plus jamais de zone vide sous la barre. */
-html, body { overscroll-behavior-y: none; }
-.bottombar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 100vh; background: inherit; pointer-events: none; }
+/* ---------- téléphone : structure « application » ----------
+   Safari iOS 26 décale les éléments « fixed » (barre du bas qui flotte au milieu, zone vide en dessous),
+   surtout après la fermeture du clavier (bug WebKit 297779). Sur téléphone, on n'utilise donc plus « fixed » :
+   l'écran est une colonne en-tête / contenu qui défile / barre du bas, comme une vraie application. */
+@media (max-width: 700px) {
+  html, body { height: 100%; }
+  body { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+  body > header.top { position: relative; top: 0; flex: none; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+  body > .wrap { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding-bottom: 24px !important; }
+  body > .bottombar { position: relative; flex: none; left: auto; right: auto; bottom: auto; }
+  :root[data-tint] body::before { display: none; }
+}
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1800,8 +1808,12 @@ function drawer() {
   $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
+const shellMode = () => matchMedia('(max-width: 700px)').matches;
+const scroller = () => shellMode() ? document.querySelector('.wrap') : null;
+const getScrollY = () => { const el = scroller(); return el ? el.scrollTop : window.scrollY; };
+const setScrollY = y => { const el = scroller(); if (el) el.scrollTop = y; else window.scrollTo(0, y); };
 function render() {
-  const keepY = window.scrollY;
+  const keepY = getScrollY();
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
   /* adresses hors agenda (année ≠ 2027/2028, mois ou date inexistants) : retour au sommaire */
@@ -1849,7 +1861,7 @@ function render() {
   if (k === 'recherche') wireSearch();
   document.title = titleOf(PK) + ' · Agenda 2027–2028';
   // ne remonter en haut que si l'on change de page ; sinon garder la position (smiley, énergie, cases…)
-  if (PK !== lastPK) window.scrollTo(0, 0); else window.scrollTo(0, keepY);
+  if (PK !== lastPK) setScrollY(0); else setScrollY(keepY);
   lastPK = PK;
 }
 function go(k) { if (!k) return; $('#drawer').classList.remove('open'); if (('#' + k) === location.hash) render(); else location.hash = k; }
@@ -1963,7 +1975,7 @@ $('#t-pen').addEventListener('click', () => penPop());
 $('#penpop').addEventListener('pointerdown', e => e.preventDefault());
 $('#penpop').addEventListener('click', e => { const b = e.target.closest('[data-pen]'); if (b) setPen(b.dataset.pen, true); });
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#penpop, #t-pen')) penPop(false); });
-window.addEventListener('scroll', () => penPop(false), { passive: true });
+window.addEventListener('scroll', () => penPop(false), { passive: true }); document.querySelector('.wrap').addEventListener('scroll', () => penPop(false), { passive: true });
 
 /* ================= répertoire & anniversaires ================= */
 function contacts() { return Array.isArray(S.contacts) ? S.contacts : (S.contacts = []); }
@@ -2228,17 +2240,7 @@ function syncBarColor() {
   } catch (e) {}
 }
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
-/* iPhone : si Safari place mal la barre du bas (rebond, clavier, barre d'outils), on la recolle au bas de l'écran visible */
-(function keepBarDown() {
-  const vv = window.visualViewport; if (!vv) return;
-  let raf = 0;
-  const fix = () => { raf = 0; const bar = document.getElementById('bottombar'); if (!bar || getComputedStyle(bar).display === 'none') return;
-    bar.style.transform = ''; const r = bar.getBoundingClientRect(); const diff = Math.round(vv.offsetTop + vv.height - r.bottom);
-    if (Math.abs(diff) > 1 && Math.abs(diff) < window.innerHeight) bar.style.transform = 'translateY(' + diff + 'px)'; };
-  const ask = () => { if (!raf) raf = requestAnimationFrame(fix); };
-  vv.addEventListener('resize', ask); vv.addEventListener('scroll', ask); window.addEventListener('scroll', ask, { passive: true }); window.addEventListener('orientationchange', () => setTimeout(ask, 300));
-  setTimeout(ask, 300);
-})();
+
 function applySettings() {
   setTimeout(syncBarColor, 0);
   const st = S.settings; const r = document.documentElement;

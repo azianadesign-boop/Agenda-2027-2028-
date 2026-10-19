@@ -1176,10 +1176,7 @@ header.top { max-width: 100%; }
 .tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
 .card.secedit { cursor: default; }
 /* bouton central « Ajouter » de la barre du bas */
-.bottombar .addbtn { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
-.bottombar .addbtn .addcircle { width: 40px; height: 40px; margin-top: -18px; border-radius: 50%; display: grid; place-items: center; background: var(--bar-ink, var(--deep)); color: var(--bar-bg, var(--sheet)); box-shadow: 0 3px 10px -5px rgba(0,0,0,.3), 0 0 0 1.5px var(--bar-bg, var(--sheet)); }
-:root:not([data-tint]) .bottombar .addbtn .addcircle { background: var(--deep); color: var(--sheet); box-shadow: 0 3px 10px -5px rgba(0,0,0,.3), 0 0 0 1.5px var(--sheet); }
-.bottombar .addbtn .addcircle .ic { font-size: 20px; stroke-width: 1.3; }
+.bottombar .addbtn .addcircle { display: contents; }
 .bottombar .addbtn::before { display: none !important; }
 /* panneau d'ajout rapide */
 .addsheet { position: fixed; inset: 0; z-index: 60; background: rgba(20, 18, 16, .38); display: none; }
@@ -1311,6 +1308,7 @@ function allCovers() {
 const COVER_KEYS = COVERS.map(c => c[0]);
 const COVER_DIR = 'couvertures/'; const COVER_V = '?v=4';
 const IC = DATA.icons;
+IC.addc = '<circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" />';
 const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const MOIS_TAB = ['JAN','FÉV','MAR','AVR','MAI','JUIN','JUIL','AOÛT','SEPT','OCT','NOV','DÉC'];
 const JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
@@ -1845,7 +1843,7 @@ function chrome() {
   $('#crumbs').innerHTML = `<span class="caps" style="font-size:9px">Agenda 2027 – 2028</span><nav>${crumbs.map(([t, k]) => `<button type="button" data-go="${k}" class="${(sec === 'year' && t === 'Année') || (sec === 'month' && t === 'Mois') || (sec === 'week' && t === 'Semaine') || (sec === 'day' && t === 'Jour') ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
   const today = inRange(TODAY) ? TODAY : D0;
   $('#bottombar').innerHTML = [['Jour', 'day', `d-${today}`, 'day'], ['Semaine', 'week', `wa-${weekStart(cd)}`, 'week'], ['Ajouter', 'plus', '#add', 'add'], ['Mois', 'month', `m-${cd.slice(0, 7)}`, 'month'], ['Sommaire', 'layout', 'index', 'index']]
-    .map(([l, i, k, s]) => k === '#add' ? `<button type="button" class="addbtn" data-addsheet="1" aria-label="Ajouter : note, tâche, rappel…"><span class="addcircle">${ic('plus')}</span>${l}</button>` : `<button type="button" data-go="${k}" class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
+    .map(([l, i, k, s]) => k === '#add' ? `<button type="button" class="addbtn" data-addsheet="1" aria-label="Ajouter : note, tâche, rappel…"><span class="addcircle">${ic('addc')}</span>${l}</button>` : `<button type="button" data-go="${k}" class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
 }
 function navItems() {
   return [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']].filter(x => isOn(x[0]));

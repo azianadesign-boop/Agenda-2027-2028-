@@ -2,3 +2,5 @@
   Cache-Control: no-store
 /activation.html
   Cache-Control: no-store
+/manifest.webmanifest
+  Content-Type: application/manifest+json

@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Agenda 27–28">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="meta-theme" content="#ECE7E1">
+<script>if (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) document.documentElement.classList.add('ios');</script>
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="icon" type="image/png" href="/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -1143,20 +1144,11 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark) .ln.pill { box-shadow: inset 0 0 0 1px #EBD6C3; }
 
 /* ---------- adaptation à tous les écrans (Android compris) ---------- */
-/* sécurité anti-débordement posée sur le contenu seulement : rien sur html/body, que Safari iPhone gère mal avec la barre du bas fixe */
-.wrap { max-width: 100%; overflow-x: clip; }
-/* ---------- téléphone : structure « application » ----------
-   Safari iOS 26 décale les éléments « fixed » (barre du bas qui flotte au milieu, zone vide en dessous),
-   surtout après la fermeture du clavier (bug WebKit 297779). Sur téléphone, on n'utilise donc plus « fixed » :
-   l'écran est une colonne en-tête / contenu qui défile / barre du bas, comme une vraie application. */
-@media (max-width: 700px) {
-  html, body { height: 100%; }
-  body { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-  body > header.top { position: relative; top: 0; flex: none; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
-  body > .wrap { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding-bottom: 24px !important; }
-  body > .bottombar { position: relative; flex: none; left: auto; right: auto; bottom: auto; }
-  :root[data-tint] body::before { display: none; }
-}
+/* Android et autres téléphones : rien ne peut dépasser sur les côtés (sinon Android dézoome la page).
+   iPhone / iPad : comportement d'origine, sans aucune de ces règles (Safari les gère mal avec la barre du bas). */
+@supports (overflow: clip) { html:not(.ios), html:not(.ios) body { overflow-x: clip; } }
+html:not(.ios) .wrap { max-width: 100%; }
+
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1808,12 +1800,8 @@ function drawer() {
   $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
-const shellMode = () => matchMedia('(max-width: 700px)').matches;
-const scroller = () => shellMode() ? document.querySelector('.wrap') : null;
-const getScrollY = () => { const el = scroller(); return el ? el.scrollTop : window.scrollY; };
-const setScrollY = y => { const el = scroller(); if (el) el.scrollTop = y; else window.scrollTo(0, y); };
 function render() {
-  const keepY = getScrollY();
+  const keepY = window.scrollY;
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
   /* adresses hors agenda (année ≠ 2027/2028, mois ou date inexistants) : retour au sommaire */
@@ -1861,7 +1849,7 @@ function render() {
   if (k === 'recherche') wireSearch();
   document.title = titleOf(PK) + ' · Agenda 2027–2028';
   // ne remonter en haut que si l'on change de page ; sinon garder la position (smiley, énergie, cases…)
-  if (PK !== lastPK) setScrollY(0); else setScrollY(keepY);
+  if (PK !== lastPK) window.scrollTo(0, 0); else window.scrollTo(0, keepY);
   lastPK = PK;
 }
 function go(k) { if (!k) return; $('#drawer').classList.remove('open'); if (('#' + k) === location.hash) render(); else location.hash = k; }
@@ -1975,7 +1963,7 @@ $('#t-pen').addEventListener('click', () => penPop());
 $('#penpop').addEventListener('pointerdown', e => e.preventDefault());
 $('#penpop').addEventListener('click', e => { const b = e.target.closest('[data-pen]'); if (b) setPen(b.dataset.pen, true); });
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#penpop, #t-pen')) penPop(false); });
-window.addEventListener('scroll', () => penPop(false), { passive: true }); document.querySelector('.wrap').addEventListener('scroll', () => penPop(false), { passive: true });
+window.addEventListener('scroll', () => penPop(false), { passive: true });
 
 /* ================= répertoire & anniversaires ================= */
 function contacts() { return Array.isArray(S.contacts) ? S.contacts : (S.contacts = []); }

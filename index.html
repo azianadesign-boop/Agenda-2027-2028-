@@ -1145,6 +1145,10 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 /* ---------- adaptation à tous les écrans (Android compris) ---------- */
 /* sécurité anti-débordement posée sur le contenu seulement : rien sur html/body, que Safari iPhone gère mal avec la barre du bas fixe */
 .wrap { max-width: 100%; overflow-x: clip; }
+/* iPhone : quand Safari « rebondit » en bas de page, la barre du bas remonte un peu.
+   On supprime ce rebond et on prolonge la couleur de la barre vers le bas : plus jamais de zone vide sous la barre. */
+html, body { overscroll-behavior-y: none; }
+.bottombar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 100vh; background: inherit; pointer-events: none; }
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2224,6 +2228,17 @@ function syncBarColor() {
   } catch (e) {}
 }
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
+/* iPhone : si Safari place mal la barre du bas (rebond, clavier, barre d'outils), on la recolle au bas de l'écran visible */
+(function keepBarDown() {
+  const vv = window.visualViewport; if (!vv) return;
+  let raf = 0;
+  const fix = () => { raf = 0; const bar = document.getElementById('bottombar'); if (!bar || getComputedStyle(bar).display === 'none') return;
+    bar.style.transform = ''; const r = bar.getBoundingClientRect(); const diff = Math.round(vv.offsetTop + vv.height - r.bottom);
+    if (Math.abs(diff) > 1 && Math.abs(diff) < window.innerHeight) bar.style.transform = 'translateY(' + diff + 'px)'; };
+  const ask = () => { if (!raf) raf = requestAnimationFrame(fix); };
+  vv.addEventListener('resize', ask); vv.addEventListener('scroll', ask); window.addEventListener('scroll', ask, { passive: true }); window.addEventListener('orientationchange', () => setTimeout(ask, 300));
+  setTimeout(ask, 300);
+})();
 function applySettings() {
   setTimeout(syncBarColor, 0);
   const st = S.settings; const r = document.documentElement;

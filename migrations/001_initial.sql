@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS codes (code_hash TEXT PRIMARY KEY, activated_at INTEGER);
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, password_salt TEXT NOT NULL, password_hash TEXT NOT NULL, created_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS redemptions (code_hash TEXT PRIMARY KEY REFERENCES codes(code_hash), user_id TEXT NOT NULL REFERENCES users(id), activated_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), expires_at INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS sessions_expiry ON sessions(expires_at);

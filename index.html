@@ -1148,14 +1148,23 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
    iPhone / iPad : comportement d'origine, sans aucune de ces règles (Safari les gère mal avec la barre du bas). */
 @supports (overflow: clip) { html:not(.ios), html:not(.ios) body { overflow-x: clip; } }
 html:not(.ios) .wrap { max-width: 100%; }
-/* Hauteur d'écran fiable sur téléphone (dvh = la vraie hauteur visible, barre d'outils du navigateur comprise),
-   contenu qui remplit l'espace et barre du bas fixe avec la zone de sécurité de l'écran. */
+/* ---------- TÉLÉPHONE : structure « application » (correction du bug de la barre du bas sur iPhone) ----------
+   Cause : la barre du bas était en « position: fixed », donc placée par rapport à la zone d'affichage de Safari.
+   Depuis iOS 26, après l'ouverture/fermeture du clavier (et parfois au défilement), Safari garde une zone
+   d'affichage faussée (visualViewport.height < innerHeight, offsetTop > 0 — bug WebKit 297779 / FB19889436) :
+   tout ce qui est « fixed » est alors dessiné trop haut, d'où la barre au milieu et le grand vide dessous.
+   Correction à la source : sur téléphone, plus aucun élément de mise en page en « fixed ». La page devient une
+   colonne de hauteur écran : en-tête, contenu qui défile (seul), barre du bas. La page elle-même ne défile plus,
+   Safari n'a donc plus rien à recalculer. Le design (couleurs, tailles, espacements) est inchangé. */
 @media (max-width: 700px) {
-  body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-  body > .wrap { flex: 1 0 auto; min-height: 0; }
-  html:not(.ios) body { overflow-x: hidden; }
-  .bottombar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; }
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; overflow: hidden; }
+  body::before, :root[data-tint] body::before { display: none; }
+  body > header.top { position: relative; top: auto; flex: none; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+  body > .wrap { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 24px !important; }
+  body > .bottombar { position: relative; left: auto; right: auto; bottom: auto; flex: none; }
 }
+
 
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
@@ -1808,8 +1817,12 @@ function drawer() {
   $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
+const shellMode = () => matchMedia('(max-width: 700px)').matches;
+const scroller = () => shellMode() ? document.querySelector('.wrap') : null;
+const getScrollY = () => { const el = scroller(); return el ? el.scrollTop : window.scrollY; };
+const setScrollY = y => { const el = scroller(); if (el) el.scrollTop = y; else window.scrollTo(0, y); };
 function render() {
-  const keepY = window.scrollY;
+  const keepY = getScrollY();
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
   /* adresses hors agenda (année ≠ 2027/2028, mois ou date inexistants) : retour au sommaire */
@@ -1857,7 +1870,7 @@ function render() {
   if (k === 'recherche') wireSearch();
   document.title = titleOf(PK) + ' · Agenda 2027–2028';
   // ne remonter en haut que si l'on change de page ; sinon garder la position (smiley, énergie, cases…)
-  if (PK !== lastPK) window.scrollTo(0, 0); else window.scrollTo(0, keepY);
+  if (PK !== lastPK) setScrollY(0); else setScrollY(keepY);
   lastPK = PK;
 }
 function go(k) { if (!k) return; $('#drawer').classList.remove('open'); if (('#' + k) === location.hash) render(); else location.hash = k; }
@@ -1971,7 +1984,9 @@ $('#t-pen').addEventListener('click', () => penPop());
 $('#penpop').addEventListener('pointerdown', e => e.preventDefault());
 $('#penpop').addEventListener('click', e => { const b = e.target.closest('[data-pen]'); if (b) setPen(b.dataset.pen, true); });
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#penpop, #t-pen')) penPop(false); });
-window.addEventListener('scroll', () => penPop(false), { passive: true });
+window.addEventListener('scroll', () => penPop(false), { passive: true }); document.querySelector('.wrap').addEventListener('scroll', () => penPop(false), { passive: true });
+/* téléphone : après la fermeture du clavier, Safari peut laisser la page décalée ; la page ne doit jamais défiler, on la remet en place */
+document.addEventListener('focusout', () => { if (shellMode()) setTimeout(() => { const se = document.scrollingElement || document.documentElement; if (se.scrollTop || window.scrollY) window.scrollTo(0, 0); }, 60); });
 
 /* ================= répertoire & anniversaires ================= */
 function contacts() { return Array.isArray(S.contacts) ? S.contacts : (S.contacts = []); }

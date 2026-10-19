@@ -1191,19 +1191,22 @@ img, video, canvas, svg { max-width: 100%; }
 .prof .eyebrow { overflow-wrap: anywhere; }
 
 /* ---------- en-tête et barre du bas aux couleurs du coloris ---------- */
-.top, .bottombar { background: var(--tab); border-color: var(--tab2); }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--tab); pointer-events: none; }
+.top, .bottombar { background: var(--bar-bg, var(--tab)); border-color: var(--bar-line, var(--tab2)); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bar-bg, var(--tab)); pointer-events: none; }
 .top .tool, .top .menu-btn { color: var(--bar-icon, var(--acc)); border-color: color-mix(in srgb, var(--bar-icon, var(--acc)) 40%, transparent); background: color-mix(in srgb, var(--sheet) 55%, transparent); }
 .top .nav button { color: var(--bar-icon, var(--muted)); }
 .top .nav button.on { color: var(--bar-ink, var(--deep)); }
 .top .tool:hover { background: var(--sheet); }
+:root[data-bar="dark"] .top :is(.tool, .menu-btn) { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .35); }
+:root[data-bar="dark"] .top .tool:hover { background: rgba(255, 255, 255, .16); }
+:root[data-bar="dark"] .top .pen-dot { box-shadow: 0 0 0 2px rgba(255, 255, 255, .9), 0 0 0 3px rgba(255, 255, 255, .35); }
 .top .brand b { color: var(--bar-ink, var(--deep)) !important; }
 .top .pen-dot { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 3px color-mix(in srgb, var(--acc) 55%, transparent); }
 .bottombar button { color: var(--bar-icon, var(--muted)) !important; }
 .bottombar button.on { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
 .bottombar button.on::before { background: var(--bar-ink, var(--acc)) !important; }
 /* coloris Noir : en-tête blanc et pictos noirs, pour rester graphique */
-:root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) :is(.top, .bottombar), :root[data-coloris="noir"]:not([data-theme="dark"]):not(.sysdark) body::before { background: #FFFFFF; border-color: #1E1D1B; }
+
 
 .bottombar button:not(.on) .ic { opacity: .9; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
@@ -2184,13 +2187,25 @@ function syncBarColor() {
     const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };
     const ratio = (a, b) => { const p = lum(a), q = lum(b); return (Math.max(p, q) + .05) / (Math.min(p, q) + .05); };
     const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    /* coloris foncé (blocs foncés) : l'en-tête et la barre du bas prennent cette couleur foncée */
+    const cs0 = getComputedStyle(r), box = cs0.getPropertyValue('--box').trim(), soft = cs0.getPropertyValue('--soft').trim(), tab = cs0.getPropertyValue('--tab').trim();
+    const blocks = [box, soft, tab].map(v => v && rgb(v)).filter(Boolean).find(v => lum(v) < .3);
+    if (blocks && lum(rgb(cs0.getPropertyValue('--bg').trim() || '#fff')) > .5) { let k = blocks; for (let i = 0; i < 25 && ratio([255, 255, 255], k) < 4.6; i++) k = k.map(v => v * .96); r.style.setProperty('--bar-bg', hex(k)); r.style.setProperty('--bar-line', 'transparent'); }
+    else { r.style.removeProperty('--bar-bg'); r.style.removeProperty('--bar-line'); }
     const bg = rgb(getComputedStyle(top).backgroundColor);
-    const dark = lum(bg) < .2, toward = dark ? [255, 255, 255] : [20, 18, 17];
+    const dark = lum(bg) < .3, toward = dark ? [255, 255, 255] : [20, 18, 17];
+    r.dataset.bar = dark ? 'dark' : 'light';
     const fit = (c, min) => { for (let t = 0; t <= 1.0001; t += .04) { const m = c.map((v, i) => v + (toward[i] - v) * t); if (ratio(m, bg) >= min) return hex(m); } return hex(toward); };
     const cs = getComputedStyle(r);
     const acc = rgb(cs.getPropertyValue('--acc').trim() || '#8a7f74'), deep = rgb(cs.getPropertyValue('--deep').trim() || '#3a3330');
-    r.style.setProperty('--bar-ink', fit(dark ? acc : deep, 7));
-    r.style.setProperty('--bar-icon', fit(acc, 4.6));
+    if (dark) {
+      /* coloris foncé : textes et pictos en blanc */
+      r.style.setProperty('--bar-ink', '#FFFFFF');
+      r.style.setProperty('--bar-icon', fit(bg.map(v => v + (255 - v) * .78), 4.6));
+    } else {
+      r.style.setProperty('--bar-ink', fit(deep, 7));
+      r.style.setProperty('--bar-icon', fit(acc, 4.6));
+    }
     const m = document.getElementById('meta-theme'); if (m) m.setAttribute('content', hex(bg));
   } catch (e) {}
 }

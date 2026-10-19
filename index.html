@@ -1174,6 +1174,28 @@ header.top { max-width: 100%; }
 .tools { flex: none; }
 .tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
 .card.secedit { cursor: default; }
+/* bouton central « Ajouter » de la barre du bas */
+.bottombar .addbtn { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
+.bottombar .addbtn .addcircle { width: 40px; height: 40px; margin-top: -18px; border-radius: 50%; display: grid; place-items: center; background: var(--bar-ink, var(--deep)); color: var(--bar-bg, var(--sheet)); box-shadow: 0 4px 12px -4px rgba(0,0,0,.35), 0 0 0 4px var(--bar-bg, var(--sheet)); }
+:root:not([data-tint]) .bottombar .addbtn .addcircle { background: var(--deep); color: var(--sheet); box-shadow: 0 4px 12px -4px rgba(0,0,0,.35), 0 0 0 4px var(--sheet); }
+.bottombar .addbtn .addcircle .ic { font-size: 20px; stroke-width: 2.2; }
+.bottombar .addbtn::before { display: none !important; }
+/* panneau d'ajout rapide */
+.addsheet { position: fixed; inset: 0; z-index: 60; background: rgba(20, 18, 16, .38); display: none; }
+.addsheet.open { display: block; }
+.addpanel { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sheet); color: var(--ink); border-radius: 22px 22px 0 0; padding: 10px max(18px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); max-height: 85%; overflow: auto; box-shadow: 0 -10px 30px -12px rgba(0,0,0,.3); }
+@media (min-width: 701px) { .addpanel { left: 50%; right: auto; width: 520px; transform: translateX(-50%); bottom: 24px; border-radius: 22px; } }
+.addgrip { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 10px; }
+.addhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.addhead b { font-family: var(--f-serif); font-weight: 500; font-size: 22px; }
+.addclose { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--deep); }
+.addgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.addgrid button { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border-radius: 14px; background: var(--soft); text-align: left; min-width: 0; color: var(--ink); }
+.addgrid button .ai { width: 36px; height: 36px; border-radius: 50%; background: var(--sheet); display: grid; place-items: center; color: var(--acc); flex: none; font-size: 17px; }
+.addgrid button b { display: block; font-weight: 600; font-size: 14.5px; line-height: 1.2; }
+.addgrid button small { display: block; font-size: 12px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+.addgrid button span:last-child { min-width: 0; }
+.addgrid button:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .sechead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .sechead .lab, .sechead > div > * { margin-bottom: 0 !important; }
 .secedit-btn { flex: none; font: inherit; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--deep) 35%, transparent); background: transparent; color: var(--deep); line-height: 1.2; position: relative; }
@@ -1259,6 +1281,7 @@ img, video, canvas, svg { max-width: 100%; }
   </div>
 </div>
 <nav class="bottombar" id="bottombar" aria-label="Navigation"></nav>
+<div class="addsheet" id="addsheet" aria-hidden="true"><div class="addpanel" role="dialog" aria-modal="true" aria-labelledby="addsheet-t"><div class="addgrip"></div><div class="addhead"><b id="addsheet-t">Ajouter</b><button type="button" class="addclose" data-addclose="1" aria-label="Fermer"></button></div><div class="addgrid" id="addgrid"></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="penpop" id="penpop" role="menu" aria-label="Couleur du stylo"></div>
 <input type="file" id="file-photo" accept="image/*" hidden>
@@ -1811,8 +1834,8 @@ function chrome() {
   const crumbs = [['Année', `y-${y}`], ['Mois', `m-${cd.slice(0, 7)}`], ['Semaine', `wa-${weekStart(cd)}`], ['Jour', `d-${cd}`]];
   $('#crumbs').innerHTML = `<span class="caps" style="font-size:9px">Agenda 2027 – 2028</span><nav>${crumbs.map(([t, k]) => `<button type="button" data-go="${k}" class="${(sec === 'year' && t === 'Année') || (sec === 'month' && t === 'Mois') || (sec === 'week' && t === 'Semaine') || (sec === 'day' && t === 'Jour') ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
   const today = inRange(TODAY) ? TODAY : D0;
-  $('#bottombar').innerHTML = [['Jour', 'day', `d-${today}`, 'day'], ['Semaine', 'week', `wa-${weekStart(cd)}`, 'week'], ['Mois', 'month', `m-${cd.slice(0, 7)}`, 'month'], ['Sommaire', 'layout', 'index', 'index'], ['Plus', 'menu', '#menu', 'more']]
-    .map(([l, i, k, s]) => `<button type="button" ${k === '#menu' ? 'data-menu="1"' : `data-go="${k}"`} class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
+  $('#bottombar').innerHTML = [['Jour', 'day', `d-${today}`, 'day'], ['Semaine', 'week', `wa-${weekStart(cd)}`, 'week'], ['Ajouter', 'plus', '#add', 'add'], ['Mois', 'month', `m-${cd.slice(0, 7)}`, 'month'], ['Sommaire', 'layout', 'index', 'index']]
+    .map(([l, i, k, s]) => k === '#add' ? `<button type="button" class="addbtn" data-addsheet="1" aria-label="Ajouter : note, tâche, rappel…"><span class="addcircle">${ic('plus')}</span>${l}</button>` : `<button type="button" data-go="${k}" class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
 }
 function drawer() {
   const items = [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']];
@@ -1824,6 +1847,7 @@ const scroller = () => shellMode() ? document.querySelector('.wrap') : null;
 const getScrollY = () => { const el = scroller(); return el ? el.scrollTop : window.scrollY; };
 const setScrollY = y => { const el = scroller(); if (el) el.scrollTop = y; else window.scrollTo(0, y); };
 function render() {
+  try { addSheet(false); } catch (_) {}
   const keepY = getScrollY();
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
@@ -2253,6 +2277,44 @@ function syncBarColor() {
   } catch (e) {}
 }
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
+/* ---------- bouton « + Ajouter » : ajout rapide ---------- */
+function addItems() {
+  const t = inRange(TODAY) ? TODAY : D0;
+  const L = [
+    ['note', 'notes', 'Note', 'Une page de notes lignées', 'notes', { go: 'n_lignes', focus: 1 }],
+    ['tache', 'todo', 'Tâche du jour', 'Dans les priorités d’aujourd’hui', null, { go: 'd-' + t, focus: /priorit|à faire/i }],
+    ['idee', 'brain', 'Idée / vide-tête', 'Tout noter, trier ensuite', 'vie', { go: 'braindump', focus: 1 }],
+    ['rdv', 'calendar', 'Rendez-vous', 'Avec date, heure et alerte', 'rappels', { rnew: 'rdv' }],
+    ['anniv', 'cake', 'Anniversaire', 'Rappel chaque année', 'rappels', { rnew: 'anniv' }],
+    ['rappel', 'bell', 'Rappel', 'Paiement, santé, autre…', 'rappels', { rnew: 'autre' }],
+    ['contact', 'userplus', 'Contact', 'Dans le répertoire', 'contacts', { cnew: 1 }],
+    ['depense', 'finances', 'Dépense', 'Suivi de chaque achat', 'finances', { go: 'depenses', focus: 1 }],
+    ['photo', 'camera', 'Photo du jour', 'Un souvenir en image', 'album', { go: 'alb_jour' }]
+  ];
+  return L.filter(x => !x[4] || isOn(x[4]));
+}
+function addSheet(open) {
+  const el = $('#addsheet'); if (!el) return;
+  if (open) {
+    $('#addgrid').innerHTML = addItems().map(([k, i, t, d, , a]) => `<button type="button" data-addact="${k}" ${a.rnew ? `data-rnew="${a.rnew}"` : ''} ${a.cnew ? 'data-cnew="1"' : ''}><span class="ai">${ic(i)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('');
+    el.querySelector('.addclose').innerHTML = ic('x');
+  }
+  el.classList.toggle('open', !!open); el.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-addsheet]')) { addSheet(true); return; }
+  const sh = $('#addsheet'); if (!sh || !sh.classList.contains('open')) return;
+  if (e.target === sh || e.target.closest('[data-addclose]')) { addSheet(false); return; }
+  const b = e.target.closest('[data-addact]'); if (!b) return;
+  const it = addItems().find(x => x[0] === b.dataset.addact); addSheet(false);
+  if (!it) return; const a = it[5];
+  if (a.go) { go(a.go); if (a.focus) setTimeout(() => {
+    let f = null;
+    if (a.focus instanceof RegExp) { const labs = [...document.querySelectorAll('#page .lab')].filter(l => a.focus.test(l.textContent)); for (const l of labs) { const all = [...document.querySelectorAll('#page textarea, #page input[type=text]')]; f = all.find(x => l.compareDocumentPosition(x) & Node.DOCUMENT_POSITION_FOLLOWING); if (f) break; } }
+    f = f || document.querySelector('#page textarea, #page input[type=text]');
+    if (f) { f.focus(); try { f.scrollIntoView({ block: 'center' }); } catch (_) {} } }, 120); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') addSheet(false); });
 
 function applySettings() {
   setTimeout(syncBarColor, 0);

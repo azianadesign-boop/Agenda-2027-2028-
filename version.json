@@ -1,6 +1,6 @@
 {
   "application": "Agenda Studio 2027-2028",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license_schema_version": 1,
   "notes": "Licences et codes conservés dans D1, indépendamment du déploiement HTML. Les données personnelles restent locales au navigateur."
 }

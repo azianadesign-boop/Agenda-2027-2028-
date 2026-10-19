@@ -9,12 +9,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Agenda 27–28">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" id="meta-theme" content="#ECE7E1">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="icon" type="image/png" href="/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Parisienne&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;500;600&family=Nunito:wght@400;500;600&family=Rubik:wght@800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Parisienne&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;500;600&family=Nunito:wght@400;500;600&family=Rubik:wght@800;900&family=Patrick+Hand&family=Indie+Flower&family=Dancing+Script:wght@500;600&family=Great+Vibes&family=Allura&display=swap">
 <style>
 /* Agenda 2027–2028 — application web, même structure et même style que l'agenda PDF.
    Feuille blanche, traits fins, petites capitales espacées, onglets fins à droite (iPad / ordinateur),
@@ -500,6 +501,20 @@ table.t tfoot td { font-weight: 500; color: var(--deep); padding: 7px 6px; borde
 :root[data-font="elegante"] { --f-write: "Cormorant Garamond", "Cormorant", Garamond, Georgia, serif; }
 :root[data-font="manuscrite"] { --f-write: "Caveat", "Bradley Hand", "Segoe Print", cursive; }
 :root[data-font="arrondie"] { --f-write: "Nunito", "SF Pro Rounded", ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif; }
+:root[data-font="ecoliere"] { --f-write: "Patrick Hand", "Bradley Hand", cursive; }
+:root[data-font="crayon"] { --f-write: "Indie Flower", "Bradley Hand", cursive; }
+:root[data-font="calligraphie"] { --f-write: "Dancing Script", "Snell Roundhand", cursive; }
+:root[data-font="romantique"] { --f-write: "Great Vibes", "Snell Roundhand", cursive; }
+:root[data-font="plume"] { --f-write: "Allura", "Snell Roundhand", cursive; }
+:root:is([data-font="ecoliere"],[data-font="crayon"]) :is(input[type=text], textarea.w, textarea) { font-size-adjust: ex-height 0.55; }
+:root[data-font="calligraphie"] :is(input[type=text], textarea.w, textarea) { font-size-adjust: ex-height 0.56; font-weight: 500; }
+:root:is([data-font="romantique"],[data-font="plume"]) :is(input[type=text], textarea.w, textarea) { font-size-adjust: ex-height 0.6; }
+.fontgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.fontcard { display: grid; gap: 6px; justify-items: center; padding: 16px 8px 12px; border: 1px solid var(--line, #e5dcd3); border-radius: 16px; background: transparent; color: inherit; cursor: pointer; }
+.fontcard { min-width: 0; overflow: hidden; }
+.fontcard b { font-weight: 400; font-size: 25px; line-height: 1.15; white-space: nowrap; max-width: 100%; }
+.fontcard small { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+.fontcard.on { border-color: var(--acc); box-shadow: inset 0 0 0 1px var(--acc); background: color-mix(in srgb, var(--acc) 9%, transparent); }
 :is(input[type=text], textarea.w), input[type=search], textarea, .ph-write { font-family: var(--f-write); }
 :root[data-font="manuscrite"] :is(input[type=text], textarea.w), :root[data-font="manuscrite"] textarea { font-size-adjust: ex-height 0.58; font-weight: 500; }
 :root[data-font="elegante"] :is(input[type=text], textarea.w), :root[data-font="elegante"] textarea { font-size-adjust: ex-height 0.47; font-weight: 500; font-variant-numeric: lining-nums; }
@@ -1126,6 +1141,70 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark) .mtable td.l { color: #74533A; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark)[data-vis] { --bg: #F4F5F9; --line: #E2E4EE; --muted: #8C90A3; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark) .ln.pill { box-shadow: inset 0 0 0 1px #EBD6C3; }
+
+/* ---------- adaptation à tous les écrans (Android compris) ---------- */
+html { overflow-x: hidden; }
+body { overflow-x: clip; max-width: 100%; }
+header.top { max-width: 100%; }
+.brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tools { flex: none; }
+.tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
+.card.secedit { cursor: default; }
+.secbtns { display: flex; gap: 6px; flex: none; }
+.secb { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--deep); font-size: 15px; display: grid; place-items: center; flex: none; }
+.secb:disabled { opacity: .3; }
+.secb[data-secrm] { color: var(--acc); }
+@media (max-width: 480px) { .card.secedit { padding: 12px; gap: 10px; } .card.secedit small { display: none; } .secbtns { gap: 4px; } .secb { width: 34px; height: 34px; } }
+.styles { max-width: 100%; }
+@media (max-width: 700px) {
+  .phr { width: 100%; }
+  .styles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; box-sizing: border-box; }
+  .styles button { padding: 9px 2px; letter-spacing: .06em; white-space: nowrap; min-width: 0; }
+}
+@media (max-width: 440px) {
+  .styles { grid-template-columns: repeat(2, minmax(0, 1fr)); border-radius: 18px; gap: 2px; }
+  .styles button { border-radius: 14px; }
+}
+/* zones tactiles plus grandes pour les petits liens, sans changer l'apparence */
+.links button, .chips button { position: relative; }
+.links button::before, .chips button::before { content: ""; position: absolute; inset: -11px -7px; }
+/* titres : la plage de dates reste groupée */
+.ph h1 em { display: inline-block; white-space: nowrap; margin-left: .3em; }
+/* suivis : la colonne des intitulés reste visible quand on fait défiler */
+.trk td.rl { position: sticky; left: 0; z-index: 1; background: var(--sheet); box-shadow: 6px 0 6px -6px rgba(0,0,0,.12); }
+.trk tr.band td.rl { background: var(--soft); }
+.trk tr.band td.rl { background: linear-gradient(var(--soft), var(--soft)), var(--sheet); }
+@media (max-width: 700px) {
+  /* calendrier du mois : la lune reste collée à son numéro */
+  .mcal .cell .num { justify-content: flex-start; gap: 3px; align-items: flex-start; }
+  .mcal .cell .num .moon { width: 5px; height: 5px; margin-top: 2px; flex: none; }
+}
+.phr { max-width: 100%; }
+img, video, canvas, svg { max-width: 100%; }
+@media (max-width: 420px) { .brand b { letter-spacing: .14em; } .tools { gap: 4px; } }
+@media (max-width: 370px) { .brand b { letter-spacing: .08em; font-size: 9.5px; } .tools .tool { width: 30px; height: 30px; } }
+@media (max-width: 330px) { .brand { display: none; } }
+.prof > :first-child { flex: none; }
+.prof > div:not(:first-child) { min-width: 0; flex: 1 1 auto; }
+.prof .owner { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.prof .eyebrow { overflow-wrap: anywhere; }
+
+/* ---------- en-tête et barre du bas aux couleurs du coloris (uniquement pour 6 coloris : Lavande, Sauge, Rose, Framboise, Demoiselle, Crépuscule) ---------- */
+:root[data-tint] :is(.top, .bottombar) { background: var(--bar-bg, var(--tab)); border-color: var(--bar-line, var(--tab2)); }
+:root[data-tint] body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bar-bg, var(--tab)); pointer-events: none; }
+:root[data-tint] .top :is(.tool, .menu-btn) { color: var(--bar-icon, var(--acc)); border-color: color-mix(in srgb, var(--bar-icon, var(--acc)) 40%, transparent); background: color-mix(in srgb, var(--sheet) 55%, transparent); }
+:root[data-tint] .top .nav button { color: var(--bar-icon, var(--muted)); }
+:root[data-tint] .top .nav button.on { color: var(--bar-ink, var(--deep)); }
+:root[data-tint] .top .tool:hover { background: var(--sheet); }
+:root[data-tint][data-bar="dark"] .top :is(.tool, .menu-btn) { background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .35); }
+:root[data-tint][data-bar="dark"] .top .tool:hover { background: rgba(255, 255, 255, .16); }
+:root[data-tint][data-bar="dark"] .top .pen-dot { box-shadow: 0 0 0 2px rgba(255, 255, 255, .9), 0 0 0 3px rgba(255, 255, 255, .35); }
+:root[data-tint] .top .brand b { color: var(--bar-ink, var(--deep)) !important; }
+:root[data-tint] .top .pen-dot { box-shadow: 0 0 0 2px var(--sheet), 0 0 0 3px color-mix(in srgb, var(--acc) 55%, transparent); }
+:root[data-tint] .bottombar button { color: var(--bar-icon, var(--muted)) !important; }
+:root[data-tint] .bottombar button.on { color: var(--bar-ink, var(--deep)) !important; font-weight: 600; }
+:root[data-tint] .bottombar button.on::before { background: var(--bar-ink, var(--acc)) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
@@ -1228,6 +1307,25 @@ const SECTIONS = [
   ['bienetre', 'Bien-être', 'bienetre', 'Habitudes, santé, sport, cuisine'], ['vie', 'Quotidien', 'vie', 'Maison, voyages, loisirs'],
   ['album', 'Album photo', 'album', 'Vos photos et souvenirs'], ['notes', 'Notes', 'notes', 'Huit papiers'],
 ];
+const RUBRIQUES = [['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact']];
+const isOn = k => { const st = (S && S.settings) || {}; if (k === 'etudes' && st.etudes === 'non') return false; return !(st.hide || []).includes(k); };
+const showEtudes = () => isOn('etudes');
+const customCard = k => { const n = k.split('-')[1]; return [k, (typeof getv === 'function' && getv(k, 't', '')) || ('Section ' + n), 'bookmark', 'Section personnalisée']; };
+const allCards = () => [...SECTIONS, ...((S && S.settings && S.settings.secExtra) || []).map(customCard)];
+const secOrderOf = list => { const o = (S && S.settings && S.settings.secOrder) || []; return list.map((x, i) => [x, o.includes(x[0]) ? o.indexOf(x[0]) : 100 + i]).sort((a, b) => a[1] - b[1]).map(x => x[0]); };
+const secList = () => secOrderOf(allCards().filter(x => isOn(x[0])));
+let secEdit = false;
+function secBlock() {
+  const list = secList();
+  const head = `<div style="display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="btn" data-secedit="1" style="flex:none">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
+  if (!secEdit) return `<div class="blk" style="margin-top:24px">${head}<div class="secgrid">${list.map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${esc(t)}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
+  const hidden = SECTIONS.filter(x => !isOn(x[0]));
+  const extra = (S.settings.secExtra || []);
+  const freeCustom = [1, 2, 3, 4].map(n => 'custom-' + n).filter(k => !extra.includes(k));
+  const cards = list.map(([k, t, i, d], j) => `<div class="card secedit"><span class="ci">${ic(i)}</span><span style="flex:1;min-width:0"><b>${esc(t)}</b><small>${d}</small></span><span class="secbtns"><button type="button" class="secb" data-secmv="${k}" data-dir="-1" aria-label="Monter ${esc(t)}" ${j === 0 ? 'disabled' : ''}>↑</button><button type="button" class="secb" data-secmv="${k}" data-dir="1" aria-label="Descendre ${esc(t)}" ${j === list.length - 1 ? 'disabled' : ''}>↓</button><button type="button" class="secb" data-secrm="${k}" aria-label="Retirer ${esc(t)}">✕</button></span></div>`).join('');
+  const adds = [...hidden.map(([k, t]) => [k, t]), ...freeCustom.map(k => [k, customCard(k)[1] + ' (personnalisée)'])];
+  return `<div class="blk" style="margin-top:24px">${head}<p class="hint" style="margin:0 0 10px">Utilisez ↑ ↓ pour changer l’ordre et ✕ pour retirer un module. Rien n’est effacé : un module retiré peut être rajouté à tout moment.</p><div class="secgrid">${cards || '<p class="hint">Aucun module affiché.</p>'}</div>${adds.length ? `<div class="covgroup" style="margin-top:16px">Ajouter un module</div><div class="opts">${adds.map(([k, t]) => `<button type="button" class="opt" data-secadd="${k}">+ ${esc(t)}</button>`).join('')}</div>` : ''}</div>`;
+}
 const L = (l, ic) => ({ l, ic });
 const TPL = {
   // ---------- études
@@ -1438,12 +1536,13 @@ V.index = () => {
   h += `</div><div class="blk" style="margin-top:24px">${lab({ l: 'Mois', ic: 'month' })}<div class="scroll">`;
   [2027, 2028].forEach(y => {
     h += `<table class="mtable" style="min-width:560px"><thead><tr><th style="text-align:left" class="serif">${y}</th>${MOIS_TAB.map(m => `<th>${m}</th>`).join('')}</tr></thead><tbody>`;
-    [['Calendrier', 'm'], ['Objectifs & bilan', 'mo'], ['Finances', 'mf'], ['Bien-être', 'mw']].forEach(([t, p]) => { h += `<tr><td class="l">${t}</td>${MOIS_TAB.map((_, i) => `<td><button type="button" data-go="${p}-${y}-${pad(i + 1)}" aria-label="${t} ${MOIS[i]} ${y}">›</button></td>`).join('')}</tr>`; });
+    [['Calendrier', 'm'], ['Objectifs & bilan', 'mo'], ['Finances', 'mf'], ['Bien-être', 'mw']].filter(([, p]) => isOn({ mf: 'finances', mw: 'bienetre' }[p] || p)).forEach(([t, p]) => { h += `<tr><td class="l">${t}</td>${MOIS_TAB.map((_, i) => `<td><button type="button" data-go="${p}-${y}-${pad(i + 1)}" aria-label="${t} ${MOIS[i]} ${y}">›</button></td>`).join('')}</tr>`; });
     h += '</tbody></table>';
   });
-  h += `</div></div><div class="blk" style="margin-top:24px">${lab({ l: 'Études', ic: 'etudes' })}<div class="grid2">${[1, 2].map(s => `<div><div class="caps" style="color:var(--deep);margin:4px 0">Semestre ${s}</div>${Array.from({ length: 8 }, (_, i) => `<div class="ln" style="cursor:pointer" data-go="cours-${s}-${i + 1}"><span style="flex:1">Cours ${i + 1}${getv(`cours-${s}-${i + 1}`, 'f.0', '') ? ' — ' + esc(getv(`cours-${s}-${i + 1}`, 'f.0', '')) : ''}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div>`).join('')}</div></div>`;
-  h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Modèles & collections', ic: 'list' })}<div class="secgrid">${SECTIONS.map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
-  h += `<div class="grid2" style="margin-top:24px"><div class="blk">${lab({ l: 'Sections personnalisées', ic: 'bookmark' })}${[1, 2, 3, 4].map(i => `<div class="ln" style="cursor:pointer" data-go="custom-${i}"><span style="flex:1">${esc(getv('custom-' + i, 't', '') || 'Section ' + i)}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div><div class="blk">${lab({ l: 'Pratique', ic: 'idea' })}${[['Rappels', 'rappels'], ['Répertoire & anniversaires', 'contacts'], ['Ma couverture', 'couverture'], ['Mode d’emploi', 'guide'], ['Infos personnelles', 'perso'], ['Recherche', 'recherche'], ['Réglages & sauvegarde', 'reglages']].map(([t, k]) => `<div class="ln" style="cursor:pointer" data-go="${k}"><span style="flex:1">${t}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div></div>`;
+  h += `</div></div>`;
+  if (showEtudes()) h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Études', ic: 'etudes' })}<div class="grid2">${[1, 2].map(s => `<div><div class="caps" style="color:var(--deep);margin:4px 0">Semestre ${s}</div>${Array.from({ length: 8 }, (_, i) => `<div class="ln" style="cursor:pointer" data-go="cours-${s}-${i + 1}"><span style="flex:1">Cours ${i + 1}${getv(`cours-${s}-${i + 1}`, 'f.0', '') ? ' — ' + esc(getv(`cours-${s}-${i + 1}`, 'f.0', '')) : ''}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div>`).join('')}</div></div>`;
+  h += secBlock();
+  h += `<div class="grid2" style="margin-top:24px"><div class="blk">${lab({ l: 'Sections personnalisées', ic: 'bookmark' })}${[1, 2, 3, 4].map(i => `<div class="ln" style="cursor:pointer" data-go="custom-${i}"><span style="flex:1">${esc(getv('custom-' + i, 't', '') || 'Section ' + i)}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div><div class="blk">${lab({ l: 'Pratique', ic: 'idea' })}${[['Rappels', 'rappels'], ['Répertoire & anniversaires', 'contacts'], ['Ma couverture', 'couverture'], ['Mode d’emploi', 'guide'], ['Infos personnelles', 'perso'], ['Recherche', 'recherche'], ['Réglages & sauvegarde', 'reglages']].filter(x => isOn(x[1])).map(([t, k]) => `<div class="ln" style="cursor:pointer" data-go="${k}"><span style="flex:1">${t}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div></div>`;
   return h;
 };
 V.year = (y) => {
@@ -1475,7 +1574,7 @@ function viewDates(y) {
 }
 function viewQuarter(y, q) {
   const Y = V.year(y);
-  const rows = ['Objectifs personnels', 'Études / travail', 'Projets', 'Je commence', 'J’arrête', 'Je continue'];
+  const rows = ['Objectifs personnels', showEtudes() ? 'Études / travail' : 'Travail', 'Projets', 'Je commence', 'J’arrête', 'Je continue'];
   let h = Y.h(`Trimestre ${q} • ${MOIS[q * 3 - 3]} – ${MOIS[q * 3 - 1]}`, `trimestre ${q}`) + '<div class="yeargrid">';
   for (let c = 0; c < 3; c++) { const m = q * 3 - 2 + c; h += `<div class="col"><button type="button" class="card" style="justify-content:center;min-height:0;padding:8px" data-go="m-${y}-${pad(m)}"><b>${cap(MOIS[m - 1])}</b></button>${rows.map((r, i) => block({ l: r, t: 'checks', n: 4 }, `c${c}r${i}`)).join('')}</div>`; }
   return h + '</div>';
@@ -1534,7 +1633,7 @@ function viewWeekA(ws) {
   let h = weekHead(ws, 'a') + '<div class="grid2 w weekA"><div class="col">';
   for (let i = 0; i < 7; i++) { const d = add(ws, i); const evs = (DATA.ev[d] || []).concat(bdaysOn(d).map(b => ['Anniv. ' + bdayLabel(b), 0])).concat(remOn(d).map(r => [remLabel(r), 0]));
     h += `<div class="dayb"><div class="dayh" ${inRange(d) ? `data-go="d-${d}"` : ''}><span class="caps">${JC[dow(d)]}</span><span class="serif">${+d.slice(8)}</span>${DATA.moon[d] ? `<i class="moon ${DATA.moon[d]}"></i>` : ''}<span class="ev">${evs.map(e => esc(e[0])).join(' · ')}</span></div>${block({ t: 'lines', n: 4 }, 'd' + i)}</div>`; }
-  h += `</div><div class="col">${blocks([{ l: 'Top priorités', ic: 'star', t: 'num', n: 5, id: 'pri' }, { l: 'Études / travail', ic: 'briefcase', t: 'checks', n: 6, id: 'tra' }, { l: 'Personnel', ic: 'bienetre', t: 'checks', n: 6, id: 'per' }, { l: 'À venir', ic: 'bell', t: 'lines', n: 4, id: 'av' }, { l: 'Habitudes', ic: 'habits', t: 'tracker', rows: 5, cols: 7, heads: dayNames(), id: 'hab' }, { l: 'Notes', ic: 'notes', t: 'area', cls: 'dots', rows: 5, id: 'not' }])}</div></div>`;
+  h += `</div><div class="col">${blocks([{ l: 'Top priorités', ic: 'star', t: 'num', n: 5, id: 'pri' }, { l: showEtudes() ? 'Études / travail' : 'Travail', ic: 'briefcase', t: 'checks', n: 6, id: 'tra' }, { l: 'Personnel', ic: 'bienetre', t: 'checks', n: 6, id: 'per' }, { l: 'À venir', ic: 'bell', t: 'lines', n: 4, id: 'av' }, { l: 'Habitudes', ic: 'habits', t: 'tracker', rows: 5, cols: 7, heads: dayNames(), id: 'hab' }, { l: 'Notes', ic: 'notes', t: 'area', cls: 'dots', rows: 5, id: 'not' }])}</div></div>`;
   return h;
 }
 function viewWeekB(ws) {
@@ -1639,11 +1738,12 @@ function viewSettings() {
     <p class="hint" style="margin-top:8px">La couverture s’affiche à l’ouverture de l’agenda, avec l’année et votre prénom, dans le format adapté à l’écran : téléphone, tablette ou ordinateur.</p></div>
     <div class="blk">${lab({ l: 'Coloris', ic: 'palette' })}<div class="covgroup">Classiques</div><div class="opts">${[['greige', 'Greige', '#A08F80'], ['lavande', 'Lavande', '#9286A8'], ['sauge', 'Sauge', '#869680'], ['rose', 'Rose', '#B28C84'], ['noir', 'Noir', '#3E3B38']].map(([v, l, c]) => opt('coloris', v, l, `<i style="background:${c}"></i>`)).join('')}</div><div class="covgroup" style="margin-top:14px">Vifs</div><div class="opts">${[['framboise', 'Framboise', '#D2386C'], ['corail', 'Corail', '#E8644A'], ['soleil', 'Soleil', '#E0A100'], ['emeraude', 'Émeraude', '#1F9A6E'], ['turquoise', 'Turquoise', '#14A3AB'], ['ocean', 'Océan', '#2F6FD6'], ['violet', 'Violet', '#7B45D1']].map(([v, l, c]) => opt('coloris', v, l, `<i style="background:${c}"></i>`)).join('')}</div><div class="covgroup" style="margin-top:14px">Doux</div><div class="opts">${[['peche', 'Pêche', '#E5A88F'], ['poudre', 'Poudré', '#D9A3AF'], ['vanille', 'Vanille', '#CDB57A'], ['menthe', 'Menthe', '#8CC3A7'], ['ciel', 'Ciel', '#8DB5D9'], ['lilas', 'Lilas', '#B3A0D6'], ['demoiselle', 'Demoiselle', '#BBBFDF']].map(([v, l, c]) => opt('coloris', v, l, `<i style="background:${c}"></i>`)).join('')}</div><div class="covgroup" style="margin-top:14px">Spéciaux · palettes</div><div class="opts">${[['nuitrosee', 'Nuit rosée', '<i style="background:linear-gradient(90deg,#2B2428 0 34%,#B06A7F 34% 67%,#F2D7DF 67%)"></i>'], ['minuit', 'Minuit & corail', '<i style="background:linear-gradient(90deg,#1F2135 0 34%,#C96F7C 34% 67%,#F2BFA9 67%)"></i>'], ['crepuscule', 'Crépuscule', '<i style="background:linear-gradient(90deg,#3D3356 0 34%,#7B6480 34% 67%,#EBC09D 67%)"></i>'], ['lagon', 'Lagon rosé', '<i style="background:linear-gradient(90deg,#A06C6C 0 34%,#A06C6C 34% 67%,#A3D9D9 67%)"></i>'], ['monarde', 'Monarde', '<i style="background:linear-gradient(90deg,#43474B 0 34%,#A34F8C 34% 67%,#CFDCE1 67%)"></i>']].map(([v, l, sw]) => opt('coloris', v, l, sw)).join('')}</div><div class="covgroup" style="margin-top:14px">Spéciaux · nuancier beige</div><div class="opts">${[['lazygreige', 'Lazy Greige', '#DFCFC0'],['morningview', 'Morning View', '#E2CDBA'],['goudes', 'Goudes Enough', '#E2D5C5'],['blankpage', 'Blank Page', '#F3F0E9'],['pottery', 'Pottery Mood', '#E7DECF'],['honeymoon', 'Honey Moon', '#F6E8DB']].map(([v, l, c]) => opt('coloris', v, l, `<i style="background:${c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></i>`)).join('')}</div></div>
     <div class="blk">${lab({ l: 'Thème', ic: 'sun' })}<div class="opts">${opt('theme', 'auto', 'Automatique')}${opt('theme', 'light', 'Clair')}${opt('theme', 'dark', 'Sombre')}</div></div>
-    <div class="blk">${lab({ l: 'Police d’écriture', ic: 'notes' })}<div class="opts">${[['moderne', 'Moderne', 'var(--f-sans)'], ['classique', 'Classique', '"Lora", Georgia, serif'], ['elegante', 'Élégante', '"Cormorant Garamond", Georgia, serif'], ['manuscrite', 'Manuscrite', '"Caveat", "Bradley Hand", cursive'], ['arrondie', 'Arrondie', '"Nunito", ui-rounded, system-ui, sans-serif']].map(([v, l, f]) => opt('font', v, `<span class="fontopt" style="font-family:${f.replace(/"/g, '&quot;')}">${l}</span>`)).join('')}</div></div>
+    <div class="blk">${lab({ l: 'Police de mon écriture', ic: 'notes' })}<p class="hint" style="margin:0 0 10px">Pour tout ce que vous écrivez : tâches, notes, événements, objectifs, journal…</p><div class="fontgrid">${[['moderne', 'Par défaut', 'var(--f-sans)', 1], ['arrondie', 'Arrondie', '"Nunito", ui-rounded, system-ui, sans-serif', 1], ['classique', 'Classique', '"Lora", Georgia, serif', 1], ['elegante', 'Élégante', '"Cormorant Garamond", Georgia, serif', 1.15], ['manuscrite', 'Manuscrite', '"Caveat", "Bradley Hand", cursive', 1.2], ['ecoliere', 'Écolière', '"Patrick Hand", cursive', 1.1], ['crayon', 'Crayon', '"Indie Flower", cursive', 1.05], ['calligraphie', 'Calligraphie', '"Dancing Script", cursive', 1.15], ['romantique', 'Romantique', '"Great Vibes", cursive', 1.3], ['plume', 'Fine plume', '"Allura", cursive', 1.35]].map(([v, l, f, z]) => `<button type="button" class="fontcard${(st.font || 'moderne') === v ? ' on' : ''}" data-setting="font" data-val="${v}" aria-pressed="${(st.font || 'moderne') === v}"><b style="font-family:${f.replace(/"/g, '&quot;')};font-size:min(${Math.round(25 * z)}px, ${(6.2 * z).toFixed(1)}vw)">Ma journée</b><small>${l}</small></button>`).join('')}</div></div>
     <div class="blk">${lab({ l: 'Couleur du stylo', ic: 'palette' })}<div class="opts">${PENS.map(([v, l]) => opt('wcolor', v, l, `<i style="background:var(--pen-${v})"></i>`)).join('')}</div><p class="hint" style="margin-top:8px">Ce que vous écrivez garde sa couleur. Changer de stylo ne modifie que les prochains textes. Le bouton stylo en haut de l’écran permet de changer de couleur à tout moment pendant que vous écrivez.</p><div class="row" style="margin-top:10px"><button type="button" class="btn" id="pen-all">${ic('palette')} Tout l’agenda dans cette couleur</button><span id="pen-all-confirm"></span></div></div>
     <div class="blk">${lab({ l: 'Taille d’écriture', ic: 'notes' })}<div class="opts">${[['petit', 'Petite', 13], ['moyen', 'Moyenne', 15.5], ['grand', 'Grande', 18.5]].map(([v, l, z]) => opt('wsize', v, `<span style="font-size:${z}px">${l}</span>`)).join('')}</div><div class="ln" style="margin-top:10px"><input type="text" class="ph-write" data-k="_apercu" value="Rendez-vous chez le dentiste à 14 h" aria-label="Aperçu" readonly></div><p class="hint" style="margin-top:8px">La police, la couleur et la taille s’appliquent à tout ce que vous écrivez. Les titres et intitulés gardent leur style.</p></div>
     <div class="blk">${lab({ l: 'Visibilité', ic: 'search' })}<div class="opts">${opt('vis', 'fine', 'Fine')}${opt('vis', 'equilibree', 'Équilibrée')}${opt('vis', 'nette', 'Nette')}</div><p class="hint" style="margin-top:8px">Fine : traits légers et texte délicat. Équilibrée : un peu plus marqué. Nette : contraste et tailles renforcés pour lire facilement.</p></div>
-    <div class="blk">${lab({ l: 'La semaine commence le', ic: 'week' })}<div class="opts">${opt('weekStart', 1, 'Lundi')}${opt('weekStart', 0, 'Dimanche')}</div></div>
+    <div class="blk" id="blk-rub">${lab({ l: 'Mes rubriques', ic: 'layout' })}<p class="hint" style="margin:0 0 10px">Touchez une rubrique pour l’afficher ou la masquer. Une rubrique masquée disparaît du sommaire et des menus ; son contenu est conservé.</p><div class="opts">${RUBRIQUES.map(([k, l, i]) => `<button type="button" class="opt${isOn(k) ? ' on' : ''}" data-rub="${k}" aria-pressed="${isOn(k)}">${isOn(k) ? '✓ ' : ''}${l}</button>`).join('')}</div></div>
+     <div class="blk">${lab({ l: 'La semaine commence le', ic: 'week' })}<div class="opts">${opt('weekStart', 1, 'Lundi')}${opt('weekStart', 0, 'Dimanche')}</div></div>
     <div class="blk">${lab({ l: 'Style de journée par défaut', ic: 'day' })}<div class="opts">${opt('style', 'original', 'Original')}${opt('style', 'journal', 'Journal')}${opt('style', 'minimaliste', 'Minimaliste')}${opt('style', 'flexible', 'Flexible')}</div></div>
     <div class="blk">${lab({ l: 'Sauvegarde', ic: 'download' })}<p class="hint" style="margin-bottom:10px">Vos notes restent sur cet appareil (${used} Ko utilisés). Exportez une sauvegarde pour la garder ailleurs ou la transférer.</p><div class="row"><button type="button" class="btn" id="exp">${ic('download')} Exporter</button><button type="button" class="btn" id="cpy">${ic('copy')} Copier la sauvegarde</button><button type="button" class="btn" id="imp">${ic('upload')} Importer</button></div><textarea class="ta plain" id="imp-txt" rows="3" placeholder="…ou collez ici une sauvegarde puis touchez Importer" style="margin-top:10px;min-height:0" aria-label="Sauvegarde à importer"></textarea></div>
     <div class="blk">${lab({ l: 'Tout effacer', ic: 'trash' })}<div class="row"><button type="button" class="btn" id="wipe">${ic('trash')} Effacer toutes mes notes</button><span id="wipe-confirm"></span></div></div>
@@ -1677,7 +1777,7 @@ function ctxDate() { let m = PK.match(/(\d{4}-\d{2}-\d{2})/); if (m) return inRa
 function sectionOf(k) { if (/^(y|ya|yg|yb|yq)-/.test(k)) return 'year'; if (/^(m|mo|mf|mw)-/.test(k)) return 'month'; if (/^w[abr]-/.test(k)) return 'week'; if (/^d-/.test(k)) return 'day'; if (TPL[k]) return TPL[k].s; if (/^cours/.test(k)) return 'etudes'; if (/^contact/.test(k)) return 'vie'; return k; }
 function chrome() {
   const sec = sectionOf(PK); const cd = ctxDate(); const y = +cd.slice(0, 4), cm = +cd.slice(5, 7);
-  $('#nav').innerHTML = NAV.map(([k, l]) => `<button type="button" data-go="${k === 'year' ? 'y-' + y : k}" class="${sec === k || (k === 'index' && PK === 'index') ? 'on' : ''}">${l}</button>`).join('');
+  $('#nav').innerHTML = NAV.filter(x => isOn(x[0])).map(([k, l]) => `<button type="button" data-go="${k === 'year' ? 'y-' + y : k}" class="${sec === k || (k === 'index' && PK === 'index') ? 'on' : ''}">${l}</button>`).join('');
   $('#tabs').innerHTML = [2027, 2028].map(yy => `<button type="button" class="yr${yy === y ? ' on' : ''}" data-go="y-${yy}">${yy}</button>`).join('') + '<div class="gap"></div>' +
     MOIS_TAB.map((m, i) => `<button type="button" class="${['month', 'week', 'day'].includes(sec) && i + 1 === cm ? 'on' : ''}" data-go="m-${y}-${pad(i + 1)}">${m}</button>`).join('');
   const crumbs = [['Année', `y-${y}`], ['Mois', `m-${cd.slice(0, 7)}`], ['Semaine', `wa-${weekStart(cd)}`], ['Jour', `d-${cd}`]];
@@ -1688,7 +1788,7 @@ function chrome() {
 }
 function drawer() {
   const items = [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']];
-  $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
+  $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
 function render() {
@@ -1766,8 +1866,13 @@ document.addEventListener('click', e => {
   const cv = e.target.closest('[data-cover]'); if (cv) { S.settings.cover = cv.dataset.cover; persist(); render(); toast('Couverture choisie'); return; }
   const av = e.target.closest('[data-avatar]'); if (av) { photoTarget = '__avatar__'; $('#file-photo').value = ''; $('#file-photo').click(); return; }
   if (e.target.closest('#av-del')) { delete S.settings.avatar; persist(); render(); return; }
-  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu]');
+  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu],[data-rub],[data-secedit],[data-secmv],[data-secrm],[data-secadd]');
   if (!el) return;
+  if (el.dataset.secedit) { secEdit = !secEdit; render(); return; }
+  if (el.dataset.secmv) { const L = secList().map(x => x[0]); const i = L.indexOf(el.dataset.secmv), j = i + (+el.dataset.dir); if (i >= 0 && j >= 0 && j < L.length) { [L[i], L[j]] = [L[j], L[i]]; S.settings.secOrder = L; persist(); render(); } return; }
+  if (el.dataset.secrm) { const k = el.dataset.secrm; if (k.startsWith('custom-')) S.settings.secExtra = (S.settings.secExtra || []).filter(x => x !== k); else { const h = (S.settings.hide || []).filter(x => x !== k); h.push(k); S.settings.hide = h; } persist(); render(); toast('Module retiré · rien n’est effacé'); return; }
+  if (el.dataset.secadd) { const k = el.dataset.secadd; if (k.startsWith('custom-')) S.settings.secExtra = [...(S.settings.secExtra || []), k]; else { S.settings.hide = (S.settings.hide || []).filter(x => x !== k); if (k === 'etudes') delete S.settings.etudes; } const L = secList().map(x => x[0]).filter(x => x !== k); L.push(k); S.settings.secOrder = L; persist(); render(); toast('Module ajouté'); return; }
+  if (el.dataset.rub) { const k = el.dataset.rub; const h = (S.settings.hide || []).filter(x => x !== k); if (isOn(k)) h.push(k); else if (k === 'etudes') delete S.settings.etudes; S.settings.hide = h; persist(); render(); return; }
   if (el.dataset.delphoto) { e.stopPropagation(); setv(PK, el.dataset.delphoto + '.img', ''); render(); return; }
   if (el.dataset.go) { go(el.dataset.go); return; }
   if (el.dataset.menu) { drawer(); $('#drawer').classList.add('open'); return; }
@@ -2068,11 +2173,52 @@ function wireSearch() {
     $('#res').innerHTML = s.length < 2 ? '<p class="hint">Tapez au moins deux lettres.</p>' : (out.length ? out.map(([pk, v]) => `<button type="button" data-go="${pk}"><b>${esc(titleOf(pk))}</b><small>${esc(v.slice(0, 120))}</small></button>`).join('') : '<p class="hint">Aucun résultat.</p>');
   });
 }
+/* couleurs de l'en-tête et de la barre du bas : calculées pour rester lisibles sur chaque coloris */
+const TINTED = ['lavande', 'sauge', 'rose', 'framboise', 'demoiselle', 'crepuscule'];
+function syncBarColor() {
+  try {
+    const top = document.querySelector('header.top'); if (!top) return;
+    const r = document.documentElement;
+    if (!TINTED.includes((S.settings || {}).coloris)) {
+      delete r.dataset.tint; delete r.dataset.bar; ['--bar-bg', '--bar-line', '--bar-ink', '--bar-icon'].forEach(v => r.style.removeProperty(v));
+      const m0 = document.getElementById('meta-theme'); if (m0) { const c0 = getComputedStyle(top).backgroundColor; m0.setAttribute('content', c0); }
+      return;
+    }
+    r.dataset.tint = '1';
+    const cv = document.createElement('canvas'); cv.width = cv.height = 1; const x = cv.getContext('2d', { willReadFrequently: true });
+    const rgb = c => { x.clearRect(0, 0, 1, 1); x.fillStyle = '#000'; x.fillStyle = c; x.fillRect(0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]]; };
+    const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); };
+    const ratio = (a, b) => { const p = lum(a), q = lum(b); return (Math.max(p, q) + .05) / (Math.min(p, q) + .05); };
+    const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    /* coloris foncé (blocs foncés) : l'en-tête et la barre du bas prennent cette couleur foncée */
+    const cs0 = getComputedStyle(r), box = cs0.getPropertyValue('--box').trim(), soft = cs0.getPropertyValue('--soft').trim(), tab = cs0.getPropertyValue('--tab').trim();
+    const blocks = [box, soft, tab].map(v => v && rgb(v)).filter(Boolean).find(v => lum(v) < .3);
+    if (blocks && lum(rgb(cs0.getPropertyValue('--bg').trim() || '#fff')) > .5) { let k = blocks; for (let i = 0; i < 25 && ratio([255, 255, 255], k) < 4.6; i++) k = k.map(v => v * .96); r.style.setProperty('--bar-bg', hex(k)); r.style.setProperty('--bar-line', 'transparent'); }
+    else { r.style.removeProperty('--bar-bg'); r.style.removeProperty('--bar-line'); }
+    const bg = rgb(getComputedStyle(top).backgroundColor);
+    const dark = lum(bg) < .3, toward = dark ? [255, 255, 255] : [20, 18, 17];
+    r.dataset.bar = dark ? 'dark' : 'light';
+    const fit = (c, min) => { for (let t = 0; t <= 1.0001; t += .04) { const m = c.map((v, i) => v + (toward[i] - v) * t); if (ratio(m, bg) >= min) return hex(m); } return hex(toward); };
+    const cs = getComputedStyle(r);
+    const acc = rgb(cs.getPropertyValue('--acc').trim() || '#8a7f74'), deep = rgb(cs.getPropertyValue('--deep').trim() || '#3a3330');
+    if (dark) {
+      /* coloris foncé : textes et pictos en blanc */
+      r.style.setProperty('--bar-ink', '#FFFFFF');
+      r.style.setProperty('--bar-icon', fit(bg.map(v => v + (255 - v) * .78), 4.6));
+    } else {
+      r.style.setProperty('--bar-ink', fit(deep, 7));
+      r.style.setProperty('--bar-icon', fit(acc, 4.6));
+    }
+    const m = document.getElementById('meta-theme'); if (m) m.setAttribute('content', hex(bg));
+  } catch (e) {}
+}
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
 function applySettings() {
+  setTimeout(syncBarColor, 0);
   const st = S.settings; const r = document.documentElement;
   if (st.coloris && st.coloris !== 'greige') r.dataset.coloris = st.coloris; else delete r.dataset.coloris;
   if (st.theme === 'light' || st.theme === 'dark') r.dataset.theme = st.theme; else delete r.dataset.theme;
-  r.dataset.font = ['moderne', 'classique', 'elegante', 'manuscrite', 'arrondie'].includes(st.font) ? st.font : 'moderne';
+  r.dataset.font = ['moderne', 'classique', 'elegante', 'manuscrite', 'arrondie', 'ecoliere', 'crayon', 'calligraphie', 'romantique', 'plume'].includes(st.font) ? st.font : 'moderne';
   r.dataset.wcolor = PEN_KEYS.includes(st.wcolor) ? st.wcolor : 'encre';
   r.dataset.wsize = ['petit', 'moyen', 'grand'].includes(st.wsize) ? st.wsize : 'moyen';
   r.classList.toggle('sysdark', !(st.theme === 'light' || st.theme === 'dark') && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);

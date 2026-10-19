@@ -1148,6 +1148,14 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
    iPhone / iPad : comportement d'origine, sans aucune de ces règles (Safari les gère mal avec la barre du bas). */
 @supports (overflow: clip) { html:not(.ios), html:not(.ios) body { overflow-x: clip; } }
 html:not(.ios) .wrap { max-width: 100%; }
+/* Hauteur d'écran fiable sur téléphone (dvh = la vraie hauteur visible, barre d'outils du navigateur comprise),
+   contenu qui remplit l'espace et barre du bas fixe avec la zone de sécurité de l'écran. */
+@media (max-width: 700px) {
+  body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+  body > .wrap { flex: 1 0 auto; min-height: 0; }
+  html:not(.ios) body { overflow-x: hidden; }
+  .bottombar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; }
+}
 
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }

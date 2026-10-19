@@ -1228,8 +1228,10 @@ const SECTIONS = [
   ['bienetre', 'Bien-être', 'bienetre', 'Habitudes, santé, sport, cuisine'], ['vie', 'Quotidien', 'vie', 'Maison, voyages, loisirs'],
   ['album', 'Album photo', 'album', 'Vos photos et souvenirs'], ['notes', 'Notes', 'notes', 'Huit papiers'],
 ];
-const showEtudes = () => !(S && S.settings && S.settings.etudes === 'non');
-const secList = () => SECTIONS.filter(x => x[0] !== 'etudes' || showEtudes());
+const RUBRIQUES = [['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact']];
+const isOn = k => { const st = (S && S.settings) || {}; if (k === 'etudes' && st.etudes === 'non') return false; return !(st.hide || []).includes(k); };
+const showEtudes = () => isOn('etudes');
+const secList = () => SECTIONS.filter(x => isOn(x[0]));
 const L = (l, ic) => ({ l, ic });
 const TPL = {
   // ---------- études
@@ -1440,13 +1442,13 @@ V.index = () => {
   h += `</div><div class="blk" style="margin-top:24px">${lab({ l: 'Mois', ic: 'month' })}<div class="scroll">`;
   [2027, 2028].forEach(y => {
     h += `<table class="mtable" style="min-width:560px"><thead><tr><th style="text-align:left" class="serif">${y}</th>${MOIS_TAB.map(m => `<th>${m}</th>`).join('')}</tr></thead><tbody>`;
-    [['Calendrier', 'm'], ['Objectifs & bilan', 'mo'], ['Finances', 'mf'], ['Bien-être', 'mw']].forEach(([t, p]) => { h += `<tr><td class="l">${t}</td>${MOIS_TAB.map((_, i) => `<td><button type="button" data-go="${p}-${y}-${pad(i + 1)}" aria-label="${t} ${MOIS[i]} ${y}">›</button></td>`).join('')}</tr>`; });
+    [['Calendrier', 'm'], ['Objectifs & bilan', 'mo'], ['Finances', 'mf'], ['Bien-être', 'mw']].filter(([, p]) => isOn({ mf: 'finances', mw: 'bienetre' }[p] || p)).forEach(([t, p]) => { h += `<tr><td class="l">${t}</td>${MOIS_TAB.map((_, i) => `<td><button type="button" data-go="${p}-${y}-${pad(i + 1)}" aria-label="${t} ${MOIS[i]} ${y}">›</button></td>`).join('')}</tr>`; });
     h += '</tbody></table>';
   });
   h += `</div></div>`;
   if (showEtudes()) h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Études', ic: 'etudes' })}<div class="grid2">${[1, 2].map(s => `<div><div class="caps" style="color:var(--deep);margin:4px 0">Semestre ${s}</div>${Array.from({ length: 8 }, (_, i) => `<div class="ln" style="cursor:pointer" data-go="cours-${s}-${i + 1}"><span style="flex:1">Cours ${i + 1}${getv(`cours-${s}-${i + 1}`, 'f.0', '') ? ' — ' + esc(getv(`cours-${s}-${i + 1}`, 'f.0', '')) : ''}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div>`).join('')}</div></div>`;
   h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Modèles & collections', ic: 'list' })}<div class="secgrid">${secList().map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
-  h += `<div class="grid2" style="margin-top:24px"><div class="blk">${lab({ l: 'Sections personnalisées', ic: 'bookmark' })}${[1, 2, 3, 4].map(i => `<div class="ln" style="cursor:pointer" data-go="custom-${i}"><span style="flex:1">${esc(getv('custom-' + i, 't', '') || 'Section ' + i)}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div><div class="blk">${lab({ l: 'Pratique', ic: 'idea' })}${[['Rappels', 'rappels'], ['Répertoire & anniversaires', 'contacts'], ['Ma couverture', 'couverture'], ['Mode d’emploi', 'guide'], ['Infos personnelles', 'perso'], ['Recherche', 'recherche'], ['Réglages & sauvegarde', 'reglages']].map(([t, k]) => `<div class="ln" style="cursor:pointer" data-go="${k}"><span style="flex:1">${t}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div></div>`;
+  h += `<div class="grid2" style="margin-top:24px"><div class="blk">${lab({ l: 'Sections personnalisées', ic: 'bookmark' })}${[1, 2, 3, 4].map(i => `<div class="ln" style="cursor:pointer" data-go="custom-${i}"><span style="flex:1">${esc(getv('custom-' + i, 't', '') || 'Section ' + i)}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div><div class="blk">${lab({ l: 'Pratique', ic: 'idea' })}${[['Rappels', 'rappels'], ['Répertoire & anniversaires', 'contacts'], ['Ma couverture', 'couverture'], ['Mode d’emploi', 'guide'], ['Infos personnelles', 'perso'], ['Recherche', 'recherche'], ['Réglages & sauvegarde', 'reglages']].filter(x => isOn(x[1])).map(([t, k]) => `<div class="ln" style="cursor:pointer" data-go="${k}"><span style="flex:1">${t}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div></div>`;
   return h;
 };
 V.year = (y) => {
@@ -1646,7 +1648,7 @@ function viewSettings() {
     <div class="blk">${lab({ l: 'Couleur du stylo', ic: 'palette' })}<div class="opts">${PENS.map(([v, l]) => opt('wcolor', v, l, `<i style="background:var(--pen-${v})"></i>`)).join('')}</div><p class="hint" style="margin-top:8px">Ce que vous écrivez garde sa couleur. Changer de stylo ne modifie que les prochains textes. Le bouton stylo en haut de l’écran permet de changer de couleur à tout moment pendant que vous écrivez.</p><div class="row" style="margin-top:10px"><button type="button" class="btn" id="pen-all">${ic('palette')} Tout l’agenda dans cette couleur</button><span id="pen-all-confirm"></span></div></div>
     <div class="blk">${lab({ l: 'Taille d’écriture', ic: 'notes' })}<div class="opts">${[['petit', 'Petite', 13], ['moyen', 'Moyenne', 15.5], ['grand', 'Grande', 18.5]].map(([v, l, z]) => opt('wsize', v, `<span style="font-size:${z}px">${l}</span>`)).join('')}</div><div class="ln" style="margin-top:10px"><input type="text" class="ph-write" data-k="_apercu" value="Rendez-vous chez le dentiste à 14 h" aria-label="Aperçu" readonly></div><p class="hint" style="margin-top:8px">La police, la couleur et la taille s’appliquent à tout ce que vous écrivez. Les titres et intitulés gardent leur style.</p></div>
     <div class="blk">${lab({ l: 'Visibilité', ic: 'search' })}<div class="opts">${opt('vis', 'fine', 'Fine')}${opt('vis', 'equilibree', 'Équilibrée')}${opt('vis', 'nette', 'Nette')}</div><p class="hint" style="margin-top:8px">Fine : traits légers et texte délicat. Équilibrée : un peu plus marqué. Nette : contraste et tailles renforcés pour lire facilement.</p></div>
-    <div class="blk">${lab({ l: 'Section Études', ic: 'etudes' })}<div class="opts"><button type="button" class="opt${showEtudes() ? ' on' : ''}" data-setting="etudes" data-val="oui">Afficher</button><button type="button" class="opt${showEtudes() ? '' : ' on'}" data-setting="etudes" data-val="non">Masquer</button></div><p class="hint" style="margin-top:8px">Vous ne faites pas d’études ? Masquez la section : elle disparaît du sommaire et des menus. Vos notes de cours sont conservées.</p></div>
+    <div class="blk" id="blk-rub">${lab({ l: 'Mes rubriques', ic: 'layout' })}<p class="hint" style="margin:0 0 10px">Touchez une rubrique pour l’afficher ou la masquer. Une rubrique masquée disparaît du sommaire et des menus ; son contenu est conservé.</p><div class="opts">${RUBRIQUES.map(([k, l, i]) => `<button type="button" class="opt${isOn(k) ? ' on' : ''}" data-rub="${k}" aria-pressed="${isOn(k)}">${isOn(k) ? '✓ ' : ''}${l}</button>`).join('')}</div></div>
      <div class="blk">${lab({ l: 'La semaine commence le', ic: 'week' })}<div class="opts">${opt('weekStart', 1, 'Lundi')}${opt('weekStart', 0, 'Dimanche')}</div></div>
     <div class="blk">${lab({ l: 'Style de journée par défaut', ic: 'day' })}<div class="opts">${opt('style', 'original', 'Original')}${opt('style', 'journal', 'Journal')}${opt('style', 'minimaliste', 'Minimaliste')}${opt('style', 'flexible', 'Flexible')}</div></div>
     <div class="blk">${lab({ l: 'Sauvegarde', ic: 'download' })}<p class="hint" style="margin-bottom:10px">Vos notes restent sur cet appareil (${used} Ko utilisés). Exportez une sauvegarde pour la garder ailleurs ou la transférer.</p><div class="row"><button type="button" class="btn" id="exp">${ic('download')} Exporter</button><button type="button" class="btn" id="cpy">${ic('copy')} Copier la sauvegarde</button><button type="button" class="btn" id="imp">${ic('upload')} Importer</button></div><textarea class="ta plain" id="imp-txt" rows="3" placeholder="…ou collez ici une sauvegarde puis touchez Importer" style="margin-top:10px;min-height:0" aria-label="Sauvegarde à importer"></textarea></div>
@@ -1681,7 +1683,7 @@ function ctxDate() { let m = PK.match(/(\d{4}-\d{2}-\d{2})/); if (m) return inRa
 function sectionOf(k) { if (/^(y|ya|yg|yb|yq)-/.test(k)) return 'year'; if (/^(m|mo|mf|mw)-/.test(k)) return 'month'; if (/^w[abr]-/.test(k)) return 'week'; if (/^d-/.test(k)) return 'day'; if (TPL[k]) return TPL[k].s; if (/^cours/.test(k)) return 'etudes'; if (/^contact/.test(k)) return 'vie'; return k; }
 function chrome() {
   const sec = sectionOf(PK); const cd = ctxDate(); const y = +cd.slice(0, 4), cm = +cd.slice(5, 7);
-  $('#nav').innerHTML = NAV.filter(x => x[0] !== 'etudes' || showEtudes()).map(([k, l]) => `<button type="button" data-go="${k === 'year' ? 'y-' + y : k}" class="${sec === k || (k === 'index' && PK === 'index') ? 'on' : ''}">${l}</button>`).join('');
+  $('#nav').innerHTML = NAV.filter(x => isOn(x[0])).map(([k, l]) => `<button type="button" data-go="${k === 'year' ? 'y-' + y : k}" class="${sec === k || (k === 'index' && PK === 'index') ? 'on' : ''}">${l}</button>`).join('');
   $('#tabs').innerHTML = [2027, 2028].map(yy => `<button type="button" class="yr${yy === y ? ' on' : ''}" data-go="y-${yy}">${yy}</button>`).join('') + '<div class="gap"></div>' +
     MOIS_TAB.map((m, i) => `<button type="button" class="${['month', 'week', 'day'].includes(sec) && i + 1 === cm ? 'on' : ''}" data-go="m-${y}-${pad(i + 1)}">${m}</button>`).join('');
   const crumbs = [['Année', `y-${y}`], ['Mois', `m-${cd.slice(0, 7)}`], ['Semaine', `wa-${weekStart(cd)}`], ['Jour', `d-${cd}`]];
@@ -1691,8 +1693,8 @@ function chrome() {
     .map(([l, i, k, s]) => `<button type="button" ${k === '#menu' ? 'data-menu="1"' : `data-go="${k}"`} class="${sec === s ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
 }
 function drawer() {
-  const items = [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ...(showEtudes() ? [['etudes', 'Études', 'etudes']] : []), ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']];
-  $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
+  const items = [['couverture', 'Couverture', 'book'], ['index', 'Sommaire', 'layout'], [`y-${ctxDate().slice(0, 4)}`, 'Année', 'year'], ['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact'], ['recherche', 'Recherche', 'search'], ['guide', 'Mode d’emploi', 'idea'], ['reglages', 'Réglages', 'settings']];
+  $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
 function render() {
@@ -1770,8 +1772,9 @@ document.addEventListener('click', e => {
   const cv = e.target.closest('[data-cover]'); if (cv) { S.settings.cover = cv.dataset.cover; persist(); render(); toast('Couverture choisie'); return; }
   const av = e.target.closest('[data-avatar]'); if (av) { photoTarget = '__avatar__'; $('#file-photo').value = ''; $('#file-photo').click(); return; }
   if (e.target.closest('#av-del')) { delete S.settings.avatar; persist(); render(); return; }
-  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu]');
+  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu],[data-rub]');
   if (!el) return;
+  if (el.dataset.rub) { const k = el.dataset.rub; const h = (S.settings.hide || []).filter(x => x !== k); if (isOn(k)) h.push(k); else if (k === 'etudes') delete S.settings.etudes; S.settings.hide = h; persist(); render(); return; }
   if (el.dataset.delphoto) { e.stopPropagation(); setv(PK, el.dataset.delphoto + '.img', ''); render(); return; }
   if (el.dataset.go) { go(el.dataset.go); return; }
   if (el.dataset.menu) { drawer(); $('#drawer').classList.add('open'); return; }

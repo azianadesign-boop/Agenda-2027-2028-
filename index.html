@@ -1155,14 +1155,16 @@ html:not(.ios) .wrap { max-width: 100%; }
    tout ce qui est « fixed » est alors dessiné trop haut, d'où la barre au milieu et le grand vide dessous.
    Correction à la source : sur téléphone, plus aucun élément de mise en page en « fixed ». La page devient une
    colonne de hauteur écran : en-tête, contenu qui défile (seul), barre du bas. La page elle-même ne défile plus,
-   Safari n'a donc plus rien à recalculer. Le design (couleurs, tailles, espacements) est inchangé. */
-@media (max-width: 700px) {
+   Safari n'a donc plus rien à recalculer. Le design (couleurs, tailles, espacements) est inchangé.
+   S'applique aux téléphones (même tournés en paysage) et aux tablettes tactiles ; l'ordinateur avec souris n'est pas concerné. */
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
   html, body { height: 100%; }
   body { display: flex; flex-direction: column; overflow: hidden; }
   body::before, :root[data-tint] body::before { display: none; }
   body > header.top { position: relative; top: auto; flex: none; padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
-  body > .wrap { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 24px !important; }
+  body > .wrap { flex: 1 1 auto; min-height: 0; align-items: flex-start; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 24px !important; }
   body > .bottombar { position: relative; left: auto; right: auto; bottom: auto; flex: none; }
+  body > .wrap > .sheet { flex-shrink: 0; }
 }
 
 
@@ -1817,7 +1819,7 @@ function drawer() {
   $('#drawer-in').innerHTML = `<div class="brand" style="margin-bottom:14px"><b>AGENDA 2027 – 2028</b></div>` + items.filter(x => isOn(x[0])).map(([k, l, i]) => `<button type="button" class="it" data-go="${k}">${ic(i)}${l}</button>`).join('');
 }
 let lastPK = null;
-const shellMode = () => matchMedia('(max-width: 700px)').matches;
+const shellMode = () => matchMedia('(max-width: 700px), (hover: none) and (pointer: coarse)').matches;
 const scroller = () => shellMode() ? document.querySelector('.wrap') : null;
 const getScrollY = () => { const el = scroller(); return el ? el.scrollTop : window.scrollY; };
 const setScrollY = y => { const el = scroller(); if (el) el.scrollTop = y; else window.scrollTo(0, y); };

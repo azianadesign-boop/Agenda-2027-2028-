@@ -1143,14 +1143,20 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark) .ln.pill { box-shadow: inset 0 0 0 1px #EBD6C3; }
 
 /* ---------- adaptation à tous les écrans (Android compris) ---------- */
-html { overflow-x: hidden; }
-body { overflow-x: clip; max-width: 100%; }
+/* « clip » coupe ce qui dépasse sans créer de zone de défilement (sinon Safari iPhone décroche la barre du bas) */
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+body { max-width: 100%; }
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tools { flex: none; }
 .tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
 .card.secedit { cursor: default; }
+.sechead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sechead .lab, .sechead > div > * { margin-bottom: 0 !important; }
+.secedit-btn { flex: none; font: inherit; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--deep) 35%, transparent); background: transparent; color: var(--deep); line-height: 1.2; position: relative; }
+.secedit-btn::before { content: ""; position: absolute; inset: -8px -4px; }
+.secedit-btn.on { background: var(--deep); color: var(--sheet); border-color: var(--deep); }
 .secbtns { display: flex; gap: 6px; flex: none; }
 .secb { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--deep); font-size: 15px; display: grid; place-items: center; flex: none; }
 .secb:disabled { opacity: .3; }
@@ -1317,7 +1323,7 @@ const secList = () => secOrderOf(allCards().filter(x => isOn(x[0])));
 let secEdit = false;
 function secBlock() {
   const list = secList();
-  const head = `<div style="display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="btn" data-secedit="1" style="flex:none">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
+  const head = `<div class="sechead"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="secedit-btn${secEdit ? ' on' : ''}" data-secedit="1">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
   if (!secEdit) return `<div class="blk" style="margin-top:24px">${head}<div class="secgrid">${list.map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${esc(t)}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
   const hidden = SECTIONS.filter(x => !isOn(x[0]));
   const extra = (S.settings.secExtra || []);
@@ -1795,6 +1801,12 @@ function render() {
   const keepY = window.scrollY;
   let k = decodeURIComponent((location.hash || '').slice(1));
   if (!k) k = 'couverture';
+  /* adresses hors agenda (année ≠ 2027/2028, mois ou date inexistants) : retour au sommaire */
+  { const yy = k.match(/^(?:y|ya|yg|yb|yq|m|mo|mf|mw|w[abr]|d)-(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/);
+    if (yy) { const Y = +yy[1], M = yy[2] ? +yy[2] : 1, D = yy[3] ? +yy[3] : 1, dt = new Date(Y, M - 1, D);
+      const real = dt.getFullYear() === Y && dt.getMonth() === M - 1 && dt.getDate() === D;
+      const okY = /^(?:w[abr])-/.test(k) ? (Y >= 2026 && Y <= 2028) : (Y === 2027 || Y === 2028);
+      if (!okY || (!/^yq-/.test(k) && !real)) k = 'index'; } }
   PK = k; let h = '', m;
   try {
     if (k === 'index') h = V.index();

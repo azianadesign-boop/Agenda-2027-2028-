@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Agenda 27–28">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="meta-theme" content="#ECE7E1">
+<script>if (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) document.documentElement.classList.add('ios');</script>
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="icon" type="image/png" href="/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -1143,12 +1144,11 @@ table.t td textarea.w { padding: 6px; min-width: 70px; }
 :root[data-coloris="honeymoon"]:not([data-theme="dark"]):not(.sysdark) .ln.pill { box-shadow: inset 0 0 0 1px #EBD6C3; }
 
 /* ---------- adaptation à tous les écrans (Android compris) ---------- */
-/* sécurité anti-débordement posée sur le contenu seulement : rien sur html/body, que Safari iPhone gère mal avec la barre du bas fixe */
-.wrap { max-width: 100%; overflow-x: clip; }
-/* iPhone : quand Safari « rebondit » en bas de page, la barre du bas remonte un peu.
-   On supprime ce rebond et on prolonge la couleur de la barre vers le bas : plus jamais de zone vide sous la barre. */
-html, body { overscroll-behavior-y: none; }
-.bottombar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 100vh; background: inherit; pointer-events: none; }
+/* Android et autres téléphones : rien ne peut dépasser sur les côtés (sinon Android dézoome la page).
+   iPhone / iPad : comportement d'origine, sans aucune de ces règles (Safari les gère mal avec la barre du bas). */
+@supports (overflow: clip) { html:not(.ios), html:not(.ios) body { overflow-x: clip; } }
+html:not(.ios) .wrap { max-width: 100%; }
+
 header.top { max-width: 100%; }
 .brand { flex: 0 1 auto; min-width: 0; overflow: hidden; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2228,17 +2228,7 @@ function syncBarColor() {
   } catch (e) {}
 }
 try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(syncBarColor, 50)); } catch (e) {}
-/* iPhone : si Safari place mal la barre du bas (rebond, clavier, barre d'outils), on la recolle au bas de l'écran visible */
-(function keepBarDown() {
-  const vv = window.visualViewport; if (!vv) return;
-  let raf = 0;
-  const fix = () => { raf = 0; const bar = document.getElementById('bottombar'); if (!bar || getComputedStyle(bar).display === 'none') return;
-    bar.style.transform = ''; const r = bar.getBoundingClientRect(); const diff = Math.round(vv.offsetTop + vv.height - r.bottom);
-    if (Math.abs(diff) > 1 && Math.abs(diff) < window.innerHeight) bar.style.transform = 'translateY(' + diff + 'px)'; };
-  const ask = () => { if (!raf) raf = requestAnimationFrame(fix); };
-  vv.addEventListener('resize', ask); vv.addEventListener('scroll', ask); window.addEventListener('scroll', ask, { passive: true }); window.addEventListener('orientationchange', () => setTimeout(ask, 300));
-  setTimeout(ask, 300);
-})();
+
 function applySettings() {
   setTimeout(syncBarColor, 0);
   const st = S.settings; const r = document.documentElement;

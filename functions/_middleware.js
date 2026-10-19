@@ -1,6 +1,10 @@
 import {sessionFor} from './api/_auth.js';
 
-const PUBLIC = new Set(['/activation', '/activation.html', '/favicon.ico']);
+const PUBLIC = new Set([
+  '/activation', '/activation.html', '/installer', '/installer.html',
+  '/manifest.webmanifest', '/favicon.ico',
+  '/icon-180.png', '/icon-192.png', '/icon-512.png', '/icon-maskable.png'
+]);
 
 export async function onRequest({request, env, next}) {
   const path = new URL(request.url).pathname;

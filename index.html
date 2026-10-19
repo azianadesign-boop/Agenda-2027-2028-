@@ -1149,6 +1149,12 @@ header.top { max-width: 100%; }
 .brand b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tools { flex: none; }
 .tool, .menu-btn { flex: none; aspect-ratio: 1 / 1; min-width: 0; }
+.card.secedit { cursor: default; }
+.secbtns { display: flex; gap: 6px; flex: none; }
+.secb { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--deep); font-size: 15px; display: grid; place-items: center; flex: none; }
+.secb:disabled { opacity: .3; }
+.secb[data-secrm] { color: var(--acc); }
+@media (max-width: 480px) { .card.secedit { padding: 12px; gap: 10px; } .card.secedit small { display: none; } .secbtns { gap: 4px; } .secb { width: 34px; height: 34px; } }
 .styles { max-width: 100%; }
 @media (max-width: 700px) {
   .phr { width: 100%; }
@@ -1287,7 +1293,22 @@ const SECTIONS = [
 const RUBRIQUES = [['etudes', 'Études', 'etudes'], ['finances', 'Finances', 'finances'], ['bienetre', 'Bien-être', 'bienetre'], ['vie', 'Quotidien', 'vie'], ['album', 'Album photo', 'album'], ['notes', 'Notes', 'notes'], ['rappels', 'Rappels', 'bell'], ['contacts', 'Répertoire', 'contact']];
 const isOn = k => { const st = (S && S.settings) || {}; if (k === 'etudes' && st.etudes === 'non') return false; return !(st.hide || []).includes(k); };
 const showEtudes = () => isOn('etudes');
-const secList = () => SECTIONS.filter(x => isOn(x[0]));
+const customCard = k => { const n = k.split('-')[1]; return [k, (typeof getv === 'function' && getv(k, 't', '')) || ('Section ' + n), 'bookmark', 'Section personnalisée']; };
+const allCards = () => [...SECTIONS, ...((S && S.settings && S.settings.secExtra) || []).map(customCard)];
+const secOrderOf = list => { const o = (S && S.settings && S.settings.secOrder) || []; return list.map((x, i) => [x, o.includes(x[0]) ? o.indexOf(x[0]) : 100 + i]).sort((a, b) => a[1] - b[1]).map(x => x[0]); };
+const secList = () => secOrderOf(allCards().filter(x => isOn(x[0])));
+let secEdit = false;
+function secBlock() {
+  const list = secList();
+  const head = `<div style="display:flex;align-items:center;gap:10px"><div style="flex:1;min-width:0">${lab({ l: 'Modèles & collections', ic: 'list' })}</div><button type="button" class="btn" data-secedit="1" style="flex:none">${secEdit ? 'Terminé' : 'Modifier'}</button></div>`;
+  if (!secEdit) return `<div class="blk" style="margin-top:24px">${head}<div class="secgrid">${list.map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${esc(t)}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
+  const hidden = SECTIONS.filter(x => !isOn(x[0]));
+  const extra = (S.settings.secExtra || []);
+  const freeCustom = [1, 2, 3, 4].map(n => 'custom-' + n).filter(k => !extra.includes(k));
+  const cards = list.map(([k, t, i, d], j) => `<div class="card secedit"><span class="ci">${ic(i)}</span><span style="flex:1;min-width:0"><b>${esc(t)}</b><small>${d}</small></span><span class="secbtns"><button type="button" class="secb" data-secmv="${k}" data-dir="-1" aria-label="Monter ${esc(t)}" ${j === 0 ? 'disabled' : ''}>↑</button><button type="button" class="secb" data-secmv="${k}" data-dir="1" aria-label="Descendre ${esc(t)}" ${j === list.length - 1 ? 'disabled' : ''}>↓</button><button type="button" class="secb" data-secrm="${k}" aria-label="Retirer ${esc(t)}">✕</button></span></div>`).join('');
+  const adds = [...hidden.map(([k, t]) => [k, t]), ...freeCustom.map(k => [k, customCard(k)[1] + ' (personnalisée)'])];
+  return `<div class="blk" style="margin-top:24px">${head}<p class="hint" style="margin:0 0 10px">Utilisez ↑ ↓ pour changer l’ordre et ✕ pour retirer un module. Rien n’est effacé : un module retiré peut être rajouté à tout moment.</p><div class="secgrid">${cards || '<p class="hint">Aucun module affiché.</p>'}</div>${adds.length ? `<div class="covgroup" style="margin-top:16px">Ajouter un module</div><div class="opts">${adds.map(([k, t]) => `<button type="button" class="opt" data-secadd="${k}">+ ${esc(t)}</button>`).join('')}</div>` : ''}</div>`;
+}
 const L = (l, ic) => ({ l, ic });
 const TPL = {
   // ---------- études
@@ -1503,7 +1524,7 @@ V.index = () => {
   });
   h += `</div></div>`;
   if (showEtudes()) h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Études', ic: 'etudes' })}<div class="grid2">${[1, 2].map(s => `<div><div class="caps" style="color:var(--deep);margin:4px 0">Semestre ${s}</div>${Array.from({ length: 8 }, (_, i) => `<div class="ln" style="cursor:pointer" data-go="cours-${s}-${i + 1}"><span style="flex:1">Cours ${i + 1}${getv(`cours-${s}-${i + 1}`, 'f.0', '') ? ' — ' + esc(getv(`cours-${s}-${i + 1}`, 'f.0', '')) : ''}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div>`).join('')}</div></div>`;
-  h += `<div class="blk" style="margin-top:24px">${lab({ l: 'Modèles & collections', ic: 'list' })}<div class="secgrid">${secList().map(([k, t, i, d]) => `<button type="button" class="card" data-go="${k}"><span class="ci">${ic(i)}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}</div></div>`;
+  h += secBlock();
   h += `<div class="grid2" style="margin-top:24px"><div class="blk">${lab({ l: 'Sections personnalisées', ic: 'bookmark' })}${[1, 2, 3, 4].map(i => `<div class="ln" style="cursor:pointer" data-go="custom-${i}"><span style="flex:1">${esc(getv('custom-' + i, 't', '') || 'Section ' + i)}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div><div class="blk">${lab({ l: 'Pratique', ic: 'idea' })}${[['Rappels', 'rappels'], ['Répertoire & anniversaires', 'contacts'], ['Ma couverture', 'couverture'], ['Mode d’emploi', 'guide'], ['Infos personnelles', 'perso'], ['Recherche', 'recherche'], ['Réglages & sauvegarde', 'reglages']].filter(x => isOn(x[1])).map(([t, k]) => `<div class="ln" style="cursor:pointer" data-go="${k}"><span style="flex:1">${t}</span><span style="color:var(--acc)">›</span></div>`).join('')}</div></div>`;
   return h;
 };
@@ -1828,8 +1849,12 @@ document.addEventListener('click', e => {
   const cv = e.target.closest('[data-cover]'); if (cv) { S.settings.cover = cv.dataset.cover; persist(); render(); toast('Couverture choisie'); return; }
   const av = e.target.closest('[data-avatar]'); if (av) { photoTarget = '__avatar__'; $('#file-photo').value = ''; $('#file-photo').click(); return; }
   if (e.target.closest('#av-del')) { delete S.settings.avatar; persist(); render(); return; }
-  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu],[data-rub]');
+  const el = e.target.closest('[data-go],[data-tog],[data-set],[data-style],[data-setting],[data-photo],[data-delphoto],[data-cycle],[data-menu],[data-rub],[data-secedit],[data-secmv],[data-secrm],[data-secadd]');
   if (!el) return;
+  if (el.dataset.secedit) { secEdit = !secEdit; render(); return; }
+  if (el.dataset.secmv) { const L = secList().map(x => x[0]); const i = L.indexOf(el.dataset.secmv), j = i + (+el.dataset.dir); if (i >= 0 && j >= 0 && j < L.length) { [L[i], L[j]] = [L[j], L[i]]; S.settings.secOrder = L; persist(); render(); } return; }
+  if (el.dataset.secrm) { const k = el.dataset.secrm; if (k.startsWith('custom-')) S.settings.secExtra = (S.settings.secExtra || []).filter(x => x !== k); else { const h = (S.settings.hide || []).filter(x => x !== k); h.push(k); S.settings.hide = h; } persist(); render(); toast('Module retiré · rien n’est effacé'); return; }
+  if (el.dataset.secadd) { const k = el.dataset.secadd; if (k.startsWith('custom-')) S.settings.secExtra = [...(S.settings.secExtra || []), k]; else { S.settings.hide = (S.settings.hide || []).filter(x => x !== k); if (k === 'etudes') delete S.settings.etudes; } const L = secList().map(x => x[0]).filter(x => x !== k); L.push(k); S.settings.secOrder = L; persist(); render(); toast('Module ajouté'); return; }
   if (el.dataset.rub) { const k = el.dataset.rub; const h = (S.settings.hide || []).filter(x => x !== k); if (isOn(k)) h.push(k); else if (k === 'etudes') delete S.settings.etudes; S.settings.hide = h; persist(); render(); return; }
   if (el.dataset.delphoto) { e.stopPropagation(); setv(PK, el.dataset.delphoto + '.img', ''); render(); return; }
   if (el.dataset.go) { go(el.dataset.go); return; }

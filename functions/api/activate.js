@@ -1,4 +1,11 @@
 import {hash,passwordHash,randomHex,json,newSession} from './_auth.js';
+import {CODE_SALT,CODE_ITER,CODE_KEYS} from './_codes.js';
+
+async function isBundledCode(code){
+ const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveBits']);
+ const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(CODE_SALT),iterations:CODE_ITER,hash:'SHA-256'},key,256);
+ return CODE_KEYS.has([...new Uint8Array(bits)].map(x=>x.toString(16).padStart(2,'0')).join(''));
+}
 
 function isMasterCode(code, env){
  const master=String(env.CODE_MAITRE||'').trim().toUpperCase();
@@ -23,8 +30,11 @@ export async function onRequestPost({request,env}){
   }catch(e){return json({error:'Cet e-mail est déjà enregistré : utilisez « Se connecter ».'},409)}
  }
  const codeHash=await hash(code);
+ const known=await env.DB.prepare('SELECT 1 FROM codes WHERE code_hash=?').bind(codeHash).first();
+ const bundled=!known&&await isBundledCode(code);
  try{
   await env.DB.batch([
+   ...(bundled?[env.DB.prepare('INSERT OR IGNORE INTO codes(code_hash) VALUES(?)').bind(codeHash)]:[]),
    env.DB.prepare('INSERT INTO users(id,email,password_salt,password_hash,created_at) VALUES(?,?,?,?,?)').bind(id,email,salt,passHash,now),
    env.DB.prepare('INSERT INTO redemptions(code_hash,user_id,activated_at) SELECT code_hash,?,? FROM codes WHERE code_hash=? AND activated_at IS NULL').bind(id,now,codeHash),
    env.DB.prepare('UPDATE codes SET activated_at=? WHERE code_hash=? AND activated_at IS NULL AND EXISTS (SELECT 1 FROM redemptions WHERE code_hash=? AND user_id=?)').bind(now,codeHash,codeHash,id)

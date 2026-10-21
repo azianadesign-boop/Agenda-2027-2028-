@@ -3096,18 +3096,27 @@ document.addEventListener('click', e => {
   const pageEl = () => document.getElementById('page');
   const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* historique des pages visitées dans l’agenda (pour « retour » / « avancer » comme sur l’iPhone) */
+  /* mémorisé pour la session : survit au rechargement après une mise à jour */
   let depth = 0, fwd = 0, own = 0;
-  addEventListener('hashchange', () => { if (own) { own--; return; } depth++; fwd = 0; });
-  const histBack = { disabled: false, click() { if (depth > 0) { depth--; fwd++; own++; history.back(); } } };
-  const histFwd = { disabled: false, click() { if (fwd > 0) { fwd--; depth++; own++; history.forward(); } } };
+  try { const m = JSON.parse(sessionStorage.getItem('agenda-nav') || '{}'); depth = Math.min(+m.d || 0, Math.max(0, history.length - 1)); fwd = +m.f || 0; } catch (_) {}
+  const keep = () => { try { sessionStorage.setItem('agenda-nav', JSON.stringify({ d: depth, f: fwd })); } catch (_) {} };
+  addEventListener('hashchange', () => { if (own) { own--; return; } depth++; fwd = 0; keep(); });
+  const histBack = { disabled: false, click() { if (depth > 0) { depth--; fwd++; own++; keep(); history.back(); } } };
+  const histFwd = { disabled: false, click() { if (fwd > 0) { fwd--; depth++; own++; keep(); history.forward(); } } };
+  /* lien « ‹ Sommaire », « ‹ Quotidien »… de la page : sert de retour si l’historique est vide */
+  const backLink = () => [...document.querySelectorAll('#page .ph .links button[data-go]')].find(b => /^\s*‹/.test(b.textContent)) || null;
+  const prevFallback = () => backLink() || (depth > 0 ? histBack : null);
   /* [précédent, suivant] : flèches de dates, sinon onglets de la page, sinon historique */
   function arrows(edge) {
-    if (edge) return [depth > 0 ? histBack : null, null];
+    if (edge) return [prevFallback(), null];
+    /* module « Mon cycle » : le geste passe d’un onglet à l’autre (les flèches de dates restent des boutons) */
+    const cy = document.querySelector('#page .cynav');
+    if (cy) { const bs = [...cy.querySelectorAll('button[data-go]')]; const k = bs.findIndex(b => b.classList.contains('on')); if (k >= 0) return [bs[k - 1] || prevFallback(), bs[k + 1] || null]; }
     const a = document.querySelector('#page .ph .arrows'); if (a) { const b = a.querySelectorAll('button'); return [b[0], b[1]]; }
     const c = document.querySelector('#page .cyday-nav'); if (c) return [c.firstElementChild, c.lastElementChild];
     const row = [...document.querySelectorAll('#page .cynav, #page .ph .links')].find(r => r.querySelector('button.on'));
-    if (row) { const bs = [...row.querySelectorAll('button[data-go]')]; const k = bs.findIndex(b => b.classList.contains('on')); if (k >= 0) return [bs[k - 1] || (depth > 0 ? histBack : null), bs[k + 1] || null]; }
-    return [depth > 0 ? histBack : null, fwd > 0 ? histFwd : null];
+    if (row) { const bs = [...row.querySelectorAll('button[data-go]')]; const k = bs.findIndex(b => b.classList.contains('on')); if (k >= 0) return [bs[k - 1] || prevFallback(), bs[k + 1] || null]; }
+    return [prevFallback(), fwd > 0 ? histFwd : null];
   }
   const standalone = () => { try { return navigator.standalone === true || matchMedia('(display-mode: standalone)').matches; } catch (_) { return false; } };
   function scrollsX(el) { for (let e = el; e && e !== document.body; e = e.parentElement) { if (e.scrollWidth > e.clientWidth + 2) { const o = getComputedStyle(e).overflowX; if (o === 'auto' || o === 'scroll') return true; } } return false; }
@@ -3176,7 +3185,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-21.1204';
+const APP_BUILD = '2026-10-21.1217';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }
@@ -3188,7 +3197,7 @@ function updBar(show) {
 function applyUpdate() {
   try { if (saveT) saveNow(); } catch (e) {}
   try { sessionStorage.setItem('agenda-upd', APP_BUILD); } catch (e) {}
-  toast('Mise à jour…'); setTimeout(() => location.reload(), 500);
+  toast('Mise à jour…'); setTimeout(() => location.replace(location.pathname + '?v=' + Date.now() + location.hash), 500);
 }
 async function checkUpdate(manual) {
   try {
@@ -3198,7 +3207,13 @@ async function checkUpdate(manual) {
     if (j.build && j.build !== APP_BUILD) {
       let tried = null; try { tried = sessionStorage.getItem('agenda-upd'); } catch (e) {}
       if (manual) { applyUpdate(); return; }
-      if (tried === APP_BUILD) return;
+      if (tried === APP_BUILD) {
+        /* le rechargement normal n’a pas suffi (iPhone, app installée) : on recharge en forçant une nouvelle adresse, une seule fois */
+        let hard = null; try { hard = sessionStorage.getItem('agenda-upd-hard'); } catch (e) {}
+        if (hard === j.build) { updBar(true); return; }
+        try { sessionStorage.setItem('agenda-upd-hard', j.build); if (saveT) saveNow(); } catch (e) {}
+        location.replace(location.pathname + '?v=' + encodeURIComponent(j.build) + location.hash); return;
+      }
       const a = document.activeElement;
       if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) updBar(true); else applyUpdate();
       return;

@@ -3090,27 +3090,39 @@ document.addEventListener('click', e => {
    La page suit le doigt, la vitesse du geste est prise en compte, puis la page sort et la suivante entre comme dans une app native.
    Ignoré dans les zones qui défilent déjà horizontalement, les champs de saisie et les bords de l’écran. */
 (() => {
-  const NO = 'select,input[type=range],input[type=date],input[type=time],button.cydot,[contenteditable="true"],.rcar,.rrow,.cynav,.addsheet,.drawer,.updbar,.cypain,svg.cyring';
+  const NO = 'select,input[type=range],input[type=date],input[type=time],button.cydot,[contenteditable="true"],.rcar,.rrow,.cynav,.addsheet,.drawer,.updbar,.cypain';
   const EASE_OUT = 'cubic-bezier(.32,.72,0,1)';
   let st = null, busy = false, raf = 0;
   const pageEl = () => document.getElementById('page');
   const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function arrows() {
+  /* historique des pages visitées dans l’agenda (pour « retour » / « avancer » comme sur l’iPhone) */
+  let depth = 0, fwd = 0, own = 0;
+  addEventListener('hashchange', () => { if (own) { own--; return; } depth++; fwd = 0; });
+  const histBack = { disabled: false, click() { if (depth > 0) { depth--; fwd++; own++; history.back(); } } };
+  const histFwd = { disabled: false, click() { if (fwd > 0) { fwd--; depth++; own++; history.forward(); } } };
+  /* [précédent, suivant] : flèches de dates, sinon onglets de la page, sinon historique */
+  function arrows(edge) {
+    if (edge) return [depth > 0 ? histBack : null, null];
     const a = document.querySelector('#page .ph .arrows'); if (a) { const b = a.querySelectorAll('button'); return [b[0], b[1]]; }
     const c = document.querySelector('#page .cyday-nav'); if (c) return [c.firstElementChild, c.lastElementChild];
-    return null;
+    const row = [...document.querySelectorAll('#page .cynav, #page .ph .links')].find(r => r.querySelector('button.on'));
+    if (row) { const bs = [...row.querySelectorAll('button[data-go]')]; const k = bs.findIndex(b => b.classList.contains('on')); if (k >= 0) return [bs[k - 1] || (depth > 0 ? histBack : null), bs[k + 1] || null]; }
+    return [depth > 0 ? histBack : null, fwd > 0 ? histFwd : null];
   }
+  const standalone = () => { try { return navigator.standalone === true || matchMedia('(display-mode: standalone)').matches; } catch (_) { return false; } };
   function scrollsX(el) { for (let e = el; e && e !== document.body; e = e.parentElement) { if (e.scrollWidth > e.clientWidth + 2) { const o = getComputedStyle(e).overflowX; if (o === 'auto' || o === 'scroll') return true; } } return false; }
   const W = () => Math.max(320, (pageEl() || document.body).getBoundingClientRect().width);
   function setX(p, x, tr) { p.style.transition = tr || 'none'; p.style.transform = x ? `translate3d(${x}px,0,0)` : ''; }
   function clean(p) { p.style.transition = ''; p.style.transform = ''; p.style.willChange = ''; document.documentElement.classList.remove('swiping'); }
   document.addEventListener('touchstart', e => {
     st = null; if (busy || e.touches.length !== 1) return; const t = e.touches[0]; const tg = e.target;
-    if (!tg.closest || !tg.closest('#page') || tg.closest(NO) || scrollsX(tg)) return;
+    if (!tg.closest || !tg.closest('#page') || tg.closest(NO) || (scrollsX(tg) && !(t.clientX < 24 || t.clientX > innerWidth - 24))) return;
     if (document.activeElement && document.activeElement !== document.body && document.activeElement.contains(tg) && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
-    if (t.clientX < 22 || t.clientX > innerWidth - 22) return;
-    const a = arrows(); if (!a) return;
-    st = { x: t.clientX, y: t.clientY, h: null, dx: 0, t0: performance.now(), pts: [[t.clientX, performance.now()]], a };
+    const rtl = document.documentElement.dir === 'rtl';
+    const edge = standalone() && (rtl ? t.clientX > innerWidth - 24 : t.clientX < 24);
+    if (!edge && (t.clientX < 22 || t.clientX > innerWidth - 22)) return;
+    const a = arrows(edge); if (!a[0] && !a[1]) return;
+    st = { edge, x: t.clientX, y: t.clientY, h: null, dx: 0, t0: performance.now(), pts: [[t.clientX, performance.now()]], a };
   }, { passive: true });
   document.addEventListener('touchmove', e => {
     if (!st || e.touches.length !== 1) return; const t = e.touches[0]; const dx = t.clientX - st.x, dy = t.clientY - st.y;
@@ -3160,11 +3172,11 @@ document.addEventListener('click', e => {
   }, { passive: true });
   document.addEventListener('touchcancel', () => { if (st && st.h) back(pageEl()); st = null; }, { passive: true });
   /* astuce affichée une seule fois sur un écran tactile */
-  setTimeout(() => { try { if (matchMedia('(pointer: coarse)').matches && !localStorage.getItem('agenda-swipe-ok') && !localStorage.getItem('agenda-swipe-tip') && arrows()) { localStorage.setItem('agenda-swipe-tip', '1'); toast('Astuce : glisse vers la gauche ou la droite pour changer de page'); } } catch (_) {} }, 2500);
+  setTimeout(() => { try { if (matchMedia('(pointer: coarse)').matches && !localStorage.getItem('agenda-swipe-ok') && !localStorage.getItem('agenda-swipe-tip') && (a => a[0] || a[1])(arrows())) { localStorage.setItem('agenda-swipe-tip', '1'); toast('Astuce : glisse vers la gauche ou la droite pour changer de page'); } } catch (_) {} }, 2500);
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-21.1155';
+const APP_BUILD = '2026-10-21.1204';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }

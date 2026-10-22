@@ -738,7 +738,8 @@ html.bxg-open, html.bxg-open body { overflow: hidden; }
 html.swiping, html.swiping body { overflow-x: clip; }
 html.swiping #page { backface-visibility: hidden; }
 /* glissement entre pages avec les transitions de vue */
-:root.vt-swipe #page { view-transition-name: page; }
+/* on nomme la zone qui défile (entre la barre du haut et celle du bas) : l’animation reste dans cette zone, sans déborder sur les barres */
+:root.vt-swipe body > .wrap { view-transition-name: page; }
 :root.vt-swipe::view-transition-old(root), :root.vt-swipe::view-transition-new(root) { animation: none; }
 :root.vt-swipe::view-transition-group(page) { animation: none; }
 :root.vt-swipe::view-transition-image-pair(page) { isolation: auto; }
@@ -4903,8 +4904,8 @@ document.addEventListener('click', e => {
     busy = true; const dir = Math.sign(dx);
     /* Transitions de vue (Safari 18, Chrome) : le navigateur prend une image de l’ancienne page et de la nouvelle
        et les fait glisser lui-même → aucune trace de l’ancienne page derrière la nouvelle, même avec le fond flouté. */
-    if (document.startViewTransition && !still()) {
-      const R = document.documentElement; R.style.setProperty('--vt-dx', s.dx + 'px'); R.style.setProperty('--vt-dir', String(dir)); R.classList.add('vt-swipe');
+    if (document.startViewTransition && !still() && shellMode()) {
+      clean(p); const R = document.documentElement; R.style.setProperty('--vt-dx', s.dx + 'px'); R.style.setProperty('--vt-dir', String(dir)); R.classList.add('vt-swipe');
       let vt;
       try {
         vt = document.startViewTransition(() => new Promise(res => { clean(p); let ok = false; const fin = () => { if (ok) return; ok = true; mo.disconnect(); res(); }; const mo = new MutationObserver(fin); mo.observe(p, { childList: true }); btn.click(); setTimeout(fin, 350); }));
@@ -4941,7 +4942,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-22.1322';
+const APP_BUILD = '2026-10-22.1407';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }

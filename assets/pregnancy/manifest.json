@@ -1,0 +1,1107 @@
+{
+ "version": 1,
+ "term_days": 287,
+ "convention": "France — terme prévu 41 SA + 0 j ; SG = SA − 2",
+ "display_rule": "L’app n’affiche une image que si sa semaine est listée dans MB_IMG_READY (index.html) ; sinon image neutre sans semaine.",
+ "weeks": [
+  {
+   "week": 1,
+   "file": "webp/week-01.webp",
+   "twins": "webp/week-01-twins.webp",
+   "source_png": "png/week-01.png",
+   "stage": "Un nouveau cycle",
+   "description": [
+    "Tes règles commencent : c’est le jour 1 du calcul de la grossesse.",
+    "Il n’y a pas encore de bébé : l’utérus renouvelle sa muqueuse.",
+    "Dans l’ovaire, plusieurs follicules commencent à mûrir."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 1 SA : un nouveau cycle",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Educational cross-section of a uterus renewing its lining and an ovary with several small developing follicles, no embryo, no baby"
+  },
+  {
+   "week": 2,
+   "file": "webp/week-02.webp",
+   "twins": "webp/week-02-twins.webp",
+   "source_png": "png/week-02.png",
+   "stage": "L’ovulation approche",
+   "description": [
+    "Un follicule prend le dessus sur les autres.",
+    "En fin de semaine environ, un ovule est libéré : c’est l’ovulation.",
+    "La muqueuse de l’utérus s’épaissit pour accueillir un œuf."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 2 SA : l’ovulation approche",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Magnified ovary releasing a single round oocyte toward the open fimbriae of the fallopian tube, no embryo"
+  },
+  {
+   "week": 3,
+   "file": "webp/week-03.webp",
+   "twins": "webp/week-03-twins.webp",
+   "source_png": "png/week-03.png",
+   "stage": "La fécondation",
+   "description": [
+    "L’ovule et un spermatozoïde se rencontrent dans la trompe.",
+    "L’œuf se divise en 2, 4, puis de nombreuses cellules.",
+    "Il voyage pendant quelques jours vers l’utérus."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 3 SA : la fécondation",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Magnified oocyte with one sperm crossing the zona pellucida inside the fallopian tube, with a 4-cell embryo and a morula further along the tube"
+  },
+  {
+   "week": 4,
+   "file": "webp/week-04.webp",
+   "twins": "webp/week-04-twins.webp",
+   "source_png": "png/week-04.png",
+   "stage": "La nidation",
+   "description": [
+    "L’œuf s’implante dans la muqueuse de l’utérus.",
+    "L’hormone de grossesse (hCG) commence à être produite.",
+    "Un test de grossesse peut devenir positif vers la date des règles attendues."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 4 SA : la nidation",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Magnified blastocyst with inner cell mass and fluid cavity nesting into thick, soft endometrium"
+  },
+  {
+   "week": 5,
+   "file": "webp/week-05.webp",
+   "twins": "webp/week-05-twins.webp",
+   "source_png": "png/week-05.png",
+   "stage": "Le sac de grossesse",
+   "description": [
+    "Un petit sac se forme dans l’utérus, avec la vésicule vitelline qui nourrit l’embryon.",
+    "L’embryon n’est encore qu’un minuscule disque de cellules.",
+    "Le tube neural, futur cerveau et moelle épinière, commence à se former."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 5 SA : le sac de grossesse",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Magnified tiny gestational sac embedded in the uterine lining, containing a round yolk sac and a minuscule flat embryonic disc"
+  },
+  {
+   "week": 6,
+   "file": "webp/week-06.webp",
+   "twins": "webp/week-06-twins.webp",
+   "source_png": "png/week-06.png",
+   "stage": "Le cœur se met à battre",
+   "description": [
+    "Le tube neural se referme.",
+    "Le cœur commence à battre : on peut le voir à l’échographie.",
+    "L’embryon est courbé en forme de C."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 6 SA : le cœur se met à battre",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 4,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Tiny elongated C-shaped embryo with visible neural tube and somites along its back, heart bulge, attached yolk sac, no limbs"
+  },
+  {
+   "week": 7,
+   "file": "webp/week-07.webp",
+   "twins": "webp/week-07-twins.webp",
+   "source_png": "png/week-07.png",
+   "stage": "Les bourgeons des membres",
+   "description": [
+    "Les ébauches des bras puis des jambes apparaissent.",
+    "Le cerveau grandit très vite.",
+    "Le cordon ombilical se forme."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 7 SA : les bourgeons des membres",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 11,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "C-shaped embryo with large head region, pharyngeal arches, small upper limb buds, emerging lower limb buds, short tail, heart prominence, yolk sac and early umbilical stalk"
+  },
+  {
+   "week": 8,
+   "file": "webp/week-08.webp",
+   "twins": "webp/week-08-twins.webp",
+   "source_png": "png/week-08.png",
+   "stage": "Des mains en palettes",
+   "description": [
+    "Les mains ressemblent à de petites palettes.",
+    "Les yeux, le nez et les oreilles se dessinent.",
+    "Le cœur se divise en quatre cavités."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 8 SA : des mains en palettes",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 17,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Curved embryo with paddle-shaped hand plates, small leg buds, dark eye spot, nasal pits, tail, large head, translucent skin"
+  },
+  {
+   "week": 9,
+   "file": "webp/week-09.webp",
+   "twins": "webp/week-09-twins.webp",
+   "source_png": "png/week-09.png",
+   "stage": "Les doigts se dessinent",
+   "description": [
+    "Les doigts et les orteils apparaissent.",
+    "Les coudes se plient.",
+    "La petite queue de l’embryon régresse."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 9 SA : les doigts se dessinent",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 23,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Embryo with finger rays on hand plates, bending elbows, foot plates with toe rays, regressing tail, trunk straightening, small gut loop inside the umbilical cord base"
+  },
+  {
+   "week": 10,
+   "file": "webp/week-10.webp",
+   "twins": "webp/week-10-twins.webp",
+   "source_png": "png/week-10.png",
+   "stage": "La fin de la période embryonnaire",
+   "description": [
+    "Les organes principaux sont en place.",
+    "Les doigts se séparent, les paupières se forment.",
+    "L’embryon devient un fœtus."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 10 SA : la fin de la période embryonnaire",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 34,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Embryo with tail almost gone, slightly webbed separating fingers, forming eyelids, nose and upper lip, head about half of the body, floating in the amniotic sac"
+  },
+  {
+   "week": 11,
+   "file": "webp/week-11.webp",
+   "twins": "webp/week-11-twins.webp",
+   "source_png": "png/week-11.png",
+   "stage": "Le début de la période fœtale",
+   "description": [
+    "Doigts et orteils sont bien séparés.",
+    "Les paupières sont fermées.",
+    "La tête représente encore la moitié du corps."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 11 SA : le début de la période fœtale",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 44,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Early fetus with separate fingers and toes, fused closed eyelids, head half of body length, thin transparent skin with fine vessels, inside the amniotic sac"
+  },
+  {
+   "week": 12,
+   "file": "webp/week-12.webp",
+   "twins": "webp/week-12-twins.webp",
+   "source_png": "png/week-12.png",
+   "stage": "Le profil se dessine",
+   "description": [
+    "On voit son profil et son menton.",
+    "Il bouge beaucoup, mais tu ne le sens pas encore.",
+    "C’est la période de la 1re échographie."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 12 SA : le profil se dessine",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 57,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Small fetus with defined profile and chin, hands near the face, low-set ears, floating in the amniotic sac, early placenta and umbilical cord visible"
+  },
+  {
+   "week": 13,
+   "file": "webp/week-13.webp",
+   "twins": "webp/week-13-twins.webp",
+   "source_png": "png/week-13.png",
+   "stage": "Les os se solidifient",
+   "description": [
+    "Son squelette commence à s’ossifier.",
+    "Ses mains se rapprochent souvent de son visage.",
+    "Le placenta assure maintenant les échanges."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 13 SA : les os se solidifient",
+   "reference": {
+    "type": "longueur tête-fesses (médiane)",
+    "value": 68,
+    "unit": "mm"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "Westerway 2015 / UNSW Embryology — CRL"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with clearer profile, neck starting to show, longer limbs, fingers touching the face, placenta and coiled umbilical cord"
+  },
+  {
+   "week": 14,
+   "file": "webp/week-14.webp",
+   "twins": "webp/week-14-twins.webp",
+   "source_png": "png/week-14.png",
+   "stage": "Le cou se dégage",
+   "description": [
+    "Son corps grandit plus vite que sa tête.",
+    "Son cou devient visible.",
+    "Un fin duvet (lanugo) commence à pousser."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 14 SA : le cou se dégage",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 90,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with visible neck, body growing faster than the head, arms near final proportion, very fine lanugo starting"
+  },
+  {
+   "week": 15,
+   "file": "webp/week-15.webp",
+   "twins": "webp/week-15-twins.webp",
+   "source_png": "png/week-15.png",
+   "stage": "Les jambes s’allongent",
+   "description": [
+    "Ses jambes deviennent plus longues que ses bras.",
+    "Sa peau est très fine, on voit ses vaisseaux.",
+    "Il peut porter son pouce à sa bouche."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 15 SA : les jambes s’allongent",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 114,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with longer legs, translucent skin with visible vessels, fused eyelids, thumb near the mouth"
+  },
+  {
+   "week": 16,
+   "file": "webp/week-16.webp",
+   "twins": "webp/week-16-twins.webp",
+   "source_png": "png/week-16.png",
+   "stage": "Les yeux regardent devant",
+   "description": [
+    "Ses yeux se placent vers l’avant du visage.",
+    "Ses oreilles rejoignent leur place.",
+    "Il se tient plus droit."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 16 SA : les yeux regardent devant",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 144,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with more upright head, eyes facing forward, ears close to final position, lean body, relaxed pose"
+  },
+  {
+   "week": 17,
+   "file": "webp/week-17.webp",
+   "twins": "webp/week-17-twins.webp",
+   "source_png": "png/week-17.png",
+   "stage": "Un squelette plus solide",
+   "description": [
+    "Ses os continuent de durcir.",
+    "Il s’étire et bouge ses membres.",
+    "Une couche de graisse commence à peine à se former."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 17 SA : un squelette plus solide",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 179,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean active fetus with very thin skin, subtle skeleton definition, limbs stretched, umbilical cord floating"
+  },
+  {
+   "week": 18,
+   "file": "webp/week-18.webp",
+   "twins": "webp/week-18-twins.webp",
+   "source_png": "png/week-18.png",
+   "stage": "Les oreilles en place",
+   "description": [
+    "Ses oreilles sont à leur position définitive.",
+    "Il peut entendre les premiers sons.",
+    "Certaines mamans sentent déjà de petits mouvements."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 18 SA : les oreilles en place",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 222,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with ears in final position, curled fingers, fine lanugo, placenta and umbilical cord in view"
+  },
+  {
+   "week": 19,
+   "file": "webp/week-19.webp",
+   "twins": "webp/week-19-twins.webp",
+   "source_png": "png/week-19.png",
+   "stage": "Le vernix apparaît",
+   "description": [
+    "Une crème blanche protectrice, le vernix, commence à couvrir sa peau.",
+    "Ses sens se développent.",
+    "Il alterne mouvements et repos."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 19 SA : le vernix apparaît",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 272,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with thin white vernix patches beginning on the skin, legs bent, eyes closed"
+  },
+  {
+   "week": 20,
+   "file": "webp/week-20.webp",
+   "twins": "webp/week-20-twins.webp",
+   "source_png": "png/week-20.png",
+   "stage": "La moitié du chemin",
+   "description": [
+    "Il a encore beaucoup de place pour bouger.",
+    "Ses mouvements deviennent plus faciles à sentir.",
+    "Ses sourcils commencent à apparaître."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 20 SA : la moitié du chemin",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 330,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Full-body lean fetus in the amniotic sac, proportions closer to a newborn but very thin, faint eyebrows, light vernix, room to move"
+  },
+  {
+   "week": 21,
+   "file": "webp/week-21.webp",
+   "twins": "webp/week-21-twins.webp",
+   "source_png": "png/week-21.png",
+   "stage": "Les ongles se forment",
+   "description": [
+    "Ses ongles commencent à pousser.",
+    "Sa peau est fine, rouge et plissée.",
+    "Il avale un peu de liquide amniotique."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 21 SA : les ongles se forment",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 398,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with wrinkled reddish translucent skin, lanugo, forming fingernails, eyes closed"
+  },
+  {
+   "week": 22,
+   "file": "webp/week-22.webp",
+   "twins": "webp/week-22-twins.webp",
+   "source_png": "png/week-22.png",
+   "stage": "Sourcils et lèvres",
+   "description": [
+    "Ses sourcils et ses cils se dessinent.",
+    "Ses lèvres sont bien formées.",
+    "C’est la période de l’échographie du 2e trimestre."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 22 SA : sourcils et lèvres",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 476,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Very lean fetus with faint eyebrows and eyelashes, defined lips, thin wrinkled skin, hands near the face"
+  },
+  {
+   "week": 23,
+   "file": "webp/week-23.webp",
+   "twins": "webp/week-23-twins.webp",
+   "source_png": "png/week-23.png",
+   "stage": "Une peau encore plissée",
+   "description": [
+    "Sa peau est encore un peu lâche et plissée.",
+    "Il réagit aux bruits forts.",
+    "Ses paumes et ses doigts sont bien dessinés."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 23 SA : une peau encore plissée",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 565,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with slightly loose wrinkled skin, well-defined palms and fingers, eyes closed, curled pose"
+  },
+  {
+   "week": 24,
+   "file": "webp/week-24.webp",
+   "twins": "webp/week-24-twins.webp",
+   "source_png": "png/week-24.png",
+   "stage": "Les poumons se préparent",
+   "description": [
+    "Ses poumons commencent à se préparer à respirer.",
+    "Il entend ta voix.",
+    "Il bouge beaucoup plus."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 24 SA : les poumons se préparent",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 665,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Lean fetus with reddish translucent wrinkled skin, eyes closed, curled in the amniotic sac with umbilical cord, placenta partly visible"
+  },
+  {
+   "week": 25,
+   "file": "webp/week-25.webp",
+   "twins": "webp/week-25-twins.webp",
+   "source_png": "png/week-25.png",
+   "stage": "Un corps qui se remplit",
+   "description": [
+    "Son corps commence à s’arrondir.",
+    "Ses cheveux poussent.",
+    "Il a des moments d’éveil et de sommeil."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 25 SA : un corps qui se remplit",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 778,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Slightly fuller fetus, visible scalp hair, pink-red skin, eyes still closed"
+  },
+  {
+   "week": 26,
+   "file": "webp/week-26.webp",
+   "twins": "webp/week-26-twins.webp",
+   "source_png": "png/week-26.png",
+   "stage": "Les paupières s’entrouvrent",
+   "description": [
+    "Ses paupières commencent à se séparer.",
+    "Sa peau devient un peu moins plissée.",
+    "Il réagit au toucher sur ton ventre."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 26 SA : les paupières s’entrouvrent",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 902,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with eyelids starting to separate, slightly less wrinkled skin, fuller limbs"
+  },
+  {
+   "week": 27,
+   "file": "webp/week-27.webp",
+   "twins": "webp/week-27-twins.webp",
+   "source_png": "png/week-27.png",
+   "stage": "Les yeux s’ouvrent",
+   "description": [
+    "Il ouvre les yeux par moments.",
+    "Ses joues commencent à se remplir.",
+    "Son cerveau se développe rapidement."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 27 SA : les yeux s’ouvrent",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1039,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with eyes softly open, cheeks beginning to fill, smoother skin, hands near the chin"
+  },
+  {
+   "week": 28,
+   "file": "webp/week-28.webp",
+   "twins": "webp/week-28-twins.webp",
+   "source_png": "png/week-28.png",
+   "stage": "Des cils et des réserves",
+   "description": [
+    "Il a des cils.",
+    "Une couche de graisse se forme sous sa peau.",
+    "Il occupe de plus en plus de place."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 28 SA : des cils et des réserves",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1189,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with open eyes and eyelashes, first fat layers, rounder limbs, filling more of the amniotic sac"
+  },
+  {
+   "week": 29,
+   "file": "webp/week-29.webp",
+   "twins": "webp/week-29-twins.webp",
+   "source_png": "png/week-29.png",
+   "stage": "Une peau plus lisse",
+   "description": [
+    "Sa peau devient plus lisse et rosée.",
+    "Il prend du poids plus vite.",
+    "Ses cheveux sont plus fournis."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 29 SA : une peau plus lisse",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1350,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with more fat, smoother pink skin, more scalp hair, less space around the body"
+  },
+  {
+   "week": 30,
+   "file": "webp/week-30.webp",
+   "twins": "webp/week-30-twins.webp",
+   "source_png": "png/week-30.png",
+   "stage": "Un visage plus rond",
+   "description": [
+    "Son visage s’arrondit.",
+    "Il perçoit la lumière à travers ton ventre.",
+    "Il replie souvent ses genoux."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 30 SA : un visage plus rond",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1523,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with rounder face, smooth pink skin, knees tucked, filling most of the sac"
+  },
+  {
+   "week": 31,
+   "file": "webp/week-31.webp",
+   "twins": "webp/week-31-twins.webp",
+   "source_png": "png/week-31.png",
+   "stage": "Des bras et des jambes potelés",
+   "description": [
+    "Ses bras et ses jambes s’arrondissent.",
+    "Ses ongles atteignent le bout de ses doigts.",
+    "Il dort par périodes."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 31 SA : des bras et des jambes potelés",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1707,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Fetus with plump arms and legs, fingernails reaching fingertips, curled position"
+  },
+  {
+   "week": 32,
+   "file": "webp/week-32.webp",
+   "twins": "webp/week-32-twins.webp",
+   "source_png": "png/week-32.png",
+   "stage": "Souvent tête en bas",
+   "description": [
+    "Beaucoup de bébés se placent tête en bas à cette période.",
+    "Le duvet (lanugo) commence à disparaître.",
+    "C’est la période de l’échographie du 3e trimestre."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 32 SA : souvent tête en bas",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 1901,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away view of the uterus with a rounder fetus in head-down position, toenails, thinning lanugo"
+  },
+  {
+   "week": 33,
+   "file": "webp/week-33.webp",
+   "twins": "webp/week-33-twins.webp",
+   "source_png": "png/week-33.png",
+   "stage": "Moins de place",
+   "description": [
+    "Il a moins de place pour bouger.",
+    "Les os de son crâne restent souples pour la naissance.",
+    "Ses mouvements changent : moins de coups, plus d’étirements."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 33 SA : moins de place",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 2103,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, head-down fetus with smooth skin and fat layers, knees to chest, limited space"
+  },
+  {
+   "week": 34,
+   "file": "webp/week-34.webp",
+   "twins": "webp/week-34-twins.webp",
+   "source_png": "png/week-34.png",
+   "stage": "Des joues potelées",
+   "description": [
+    "Ses joues sont rondes.",
+    "Le vernix est plus épais.",
+    "Ses poumons continuent de mûrir."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 34 SA : des joues potelées",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 2312,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, compact curled fetus with chubby cheeks, thicker vernix patches"
+  },
+  {
+   "week": 35,
+   "file": "webp/week-35.webp",
+   "twins": "webp/week-35-twins.webp",
+   "source_png": "png/week-35.png",
+   "stage": "Des plis aux poignets",
+   "description": [
+    "De petits plis apparaissent aux poignets.",
+    "Il est bien installé, souvent tête en bas.",
+    "Il continue de prendre du poids."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 35 SA : des plis aux poignets",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 2527,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, plump fetus with folds at the wrists, snug head-down position"
+  },
+  {
+   "week": 36,
+   "file": "webp/week-36.webp",
+   "twins": "webp/week-36-twins.webp",
+   "source_png": "png/week-36.png",
+   "stage": "Il descend vers le bassin",
+   "description": [
+    "Le duvet a presque disparu.",
+    "Sa tête peut commencer à descendre vers ton bassin.",
+    "Il est très à l’étroit."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 36 SA : il descend vers le bassin",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 2745,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, round fetus, lanugo mostly gone, head descending toward the pelvis, tight fit"
+  },
+  {
+   "week": 37,
+   "file": "webp/week-37.webp",
+   "twins": "webp/week-37-twins.webp",
+   "source_png": "png/week-37.png",
+   "stage": "Bébé est à terme",
+   "description": [
+    "À partir de 37 SA, bébé est considéré comme né à terme.",
+    "Il a les proportions d’un nouveau-né.",
+    "Il continue de grossir jusqu’à la naissance."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 37 SA : bébé est à terme",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 2966,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, fetus with full newborn proportions, chubby cheeks, limb creases, head in the pelvis"
+  },
+  {
+   "week": 38,
+   "file": "webp/week-38.webp",
+   "twins": "webp/week-38-twins.webp",
+   "source_png": "png/week-38.png",
+   "stage": "Prêt à naître",
+   "description": [
+    "Il est prêt à naître.",
+    "Il reste du vernix par endroits.",
+    "Ses cheveux peuvent être bien fournis."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 38 SA : prêt à naître",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 3186,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, full-term fetus tightly curled, vernix patches, more scalp hair"
+  },
+  {
+   "week": 39,
+   "file": "webp/week-39.webp",
+   "twins": "webp/week-39-twins.webp",
+   "source_png": "png/week-39.png",
+   "stage": "Très peu de place",
+   "description": [
+    "Ses ongles sont longs.",
+    "Il a très peu de place.",
+    "Il continue de bouger : signale toute baisse des mouvements."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 39 SA : très peu de place",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 3403,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, chubby full-term fetus with longer nails, very little room"
+  },
+  {
+   "week": 40,
+   "file": "webp/week-40.webp",
+   "twins": "webp/week-40-twins.webp",
+   "source_png": "png/week-40.png",
+   "stage": "Tête engagée",
+   "description": [
+    "Sa tête est souvent engagée dans ton bassin.",
+    "Il a des petits plis de peau.",
+    "Le travail peut commencer à tout moment."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 40 SA : tête engagée",
+   "reference": {
+    "type": "poids fœtal estimé (médiane OMS)",
+    "value": 3617,
+    "unit": "g"
+   },
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)",
+    "OMS — Kiserud et al. 2017, PLoS Med"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, plump full-term fetus with skin folds, head engaged deep in the pelvis"
+  },
+  {
+   "week": 41,
+   "file": "webp/week-41.webp",
+   "twins": "webp/week-41-twins.webp",
+   "source_png": "png/week-41.png",
+   "stage": "Le terme prévu",
+   "description": [
+    "C’est ta date prévue d’accouchement en France.",
+    "Ta maternité te suit de plus près à partir de maintenant.",
+    "Bébé est prêt, il a peu de vernix."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 41 SA : le terme prévu",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, full-term fetus with slightly less vernix, head engaged, very snug fit"
+  },
+  {
+   "week": 42,
+   "file": "webp/week-42.webp",
+   "twins": "webp/week-42-twins.webp",
+   "source_png": "png/week-42.png",
+   "stage": "Le dépassement de terme",
+   "description": [
+    "Ta maternité te propose une surveillance rapprochée.",
+    "Un déclenchement est souvent discuté avec toi.",
+    "Sa peau peut être un peu sèche aux mains et aux pieds."
+   ],
+   "alt": "Illustration pédagogique indicative, semaine 42 SA : le dépassement de terme",
+   "reference": null,
+   "sources": [
+    "Santé.fr — calcul de la date d’accouchement (terme à 41 SA)"
+   ],
+   "status": "à produire",
+   "twins_status": "à produire",
+   "validated_by": null,
+   "validated_on": null,
+   "prompt_subject": "Cut-away uterus view, full-term fetus with very little vernix, slightly dry skin on hands and feet, longer nails, plenty of hair, very tight fit"
+  }
+ ]
+}

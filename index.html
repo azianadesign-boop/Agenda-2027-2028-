@@ -648,7 +648,7 @@ button.cyphcard { display: flex; align-items: center; gap: 12px; }
 .mbch span { background: var(--soft); }
 .mbweek { display: grid; gap: 12px; margin: 0 0 14px; } .mbweek-h { display: flex; align-items: center; justify-content: space-between; } .mbweek-h b { font-family: var(--f-serif); font-size: 24px; font-weight: 400; }
 .mbvis { margin: 0; border-radius: 26px; overflow: hidden; background: radial-gradient(circle at 50% 45%, #FFF4EE, #F8E3DA); aspect-ratio: 1; display: grid; place-items: center; position: relative; }
-.mbvis img { width: 100%; height: 100%; object-fit: cover; display: block; } .mbvis figcaption { position: absolute; bottom: 8px; inset-inline: 0; text-align: center; font-size: 11px; color: #8A6A60; }
+.mbvis img { width: 100%; height: 100%; object-fit: cover; display: block; } .mbvis img + figcaption { inset-inline: auto; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.72); color: #7A5A50; backdrop-filter: blur(4px); } .mbvis figcaption { position: absolute; bottom: 8px; inset-inline: 0; text-align: center; font-size: 11px; color: #8A6A60; }
 .mbvis.drawn { aspect-ratio: 5 / 4; } .mbvis.drawn svg { height: 86%; width: auto; margin-top: -10px; } .mbvis.none { aspect-ratio: 16 / 7; } .mbvis.none svg { height: 82%; width: auto; opacity: .9; }
 :root[data-theme="dark"] .mbvis { background: radial-gradient(circle at 50% 45%, #3A2E2B, #2A2220); }
 .mbwcs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .mbwc { display: grid; justify-items: center; text-align: center; gap: 3px; padding: 12px 6px; border-radius: 18px; background: var(--soft); }
@@ -5707,7 +5707,7 @@ const MB_WMAMA = [
 const mbWRange = w => MB_WMAMA.find(r => w >= r[0] && w <= r[1]) || MB_WMAMA[MB_WMAMA.length - 1];
 /* illustrations : chaque semaine a son fichier ; l’app n’affiche que les images validées (voir assets/pregnancy/manifest.json).
    Pour publier une illustration : ajouter assets/pregnancy/webp/week-XX.webp puis le numéro de la semaine ci-dessous. */
-const MB_IMG_READY = [];
+const MB_IMG_READY = [2, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 const MB_IMG_TWINS = [];
 /* illustration dessinée (SVG) : évolue avec la semaine réelle, en attendant les images validées */
 function mbFetusSvg(w, k) {
@@ -6793,7 +6793,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-24.2150';
+const APP_BUILD = '2026-10-24.2250';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }

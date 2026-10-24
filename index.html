@@ -5707,7 +5707,7 @@ const MB_WMAMA = [
 const mbWRange = w => MB_WMAMA.find(r => w >= r[0] && w <= r[1]) || MB_WMAMA[MB_WMAMA.length - 1];
 /* illustrations : chaque semaine a son fichier ; l’app n’affiche que les images validées (voir assets/pregnancy/manifest.json).
    Pour publier une illustration : ajouter assets/pregnancy/webp/week-XX.webp puis le numéro de la semaine ci-dessous. */
-const MB_IMG_READY = [2, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+const MB_IMG_READY = [2, 3, 4, 7, 8, 9, 10, 31];
 const MB_IMG_TWINS = [];
 /* illustration dessinée (SVG) : évolue avec la semaine réelle, en attendant les images validées */
 function mbFetusSvg(w, k) {
@@ -6793,7 +6793,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-24.2250';
+const APP_BUILD = '2026-10-24.2256';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }

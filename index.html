@@ -648,7 +648,7 @@ button.cyphcard { display: flex; align-items: center; gap: 12px; }
 .mbch span { background: var(--soft); }
 .mbweek { display: grid; gap: 12px; margin: 0 0 14px; } .mbweek-h { display: flex; align-items: center; justify-content: space-between; } .mbweek-h b { font-family: var(--f-serif); font-size: 24px; font-weight: 400; }
 .mbvis { margin: 0; border-radius: 26px; overflow: hidden; background: radial-gradient(circle at 50% 45%, #FFF4EE, #F8E3DA); aspect-ratio: 1; display: grid; place-items: center; position: relative; }
-.mbvis img { width: 100%; height: 100%; object-fit: cover; display: block; } .mbvis img + figcaption { inset-inline: auto; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.72); color: #7A5A50; backdrop-filter: blur(4px); } .mbvis figcaption { position: absolute; bottom: 8px; inset-inline: 0; text-align: center; font-size: 11px; color: #8A6A60; }
+.mbvis img, .mbvis video { width: 100%; height: 100%; object-fit: cover; display: block; } .mbvis img + figcaption, .mbvis video + figcaption { inset-inline: auto; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.72); color: #7A5A50; backdrop-filter: blur(4px); } .mbvis figcaption { position: absolute; bottom: 8px; inset-inline: 0; text-align: center; font-size: 11px; color: #8A6A60; }
 .mbvis.drawn { aspect-ratio: 5 / 4; } .mbvis.drawn svg { height: 86%; width: auto; margin-top: -10px; } .mbvis.none { aspect-ratio: 16 / 7; } .mbvis.none svg { height: 82%; width: auto; opacity: .9; }
 :root[data-theme="dark"] .mbvis { background: radial-gradient(circle at 50% 45%, #3A2E2B, #2A2220); }
 .mbwcs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .mbwc { display: grid; justify-items: center; text-align: center; gap: 3px; padding: 12px 6px; border-radius: 18px; background: var(--soft); }
@@ -5756,7 +5756,18 @@ ${w >= 7 ? `<ellipse cx="22" cy="0" rx="${w >= 8 ? 9 : 5}" ry="${w >= 8 ? 6 : 4}
   function L5(w) { return 0.42 + (w - 6) * 0.07; }
 }
 function mbBabySvgFig(w, t) { return `<figure class="mbvis drawn">${mbBabySvg(w, !!t)}<figcaption>Illustration pédagogique, non diagnostique</figcaption></figure>`; }
+const MB_VID_READY = [31];
+/* vidéo de la semaine : muette, en boucle, lecture seulement quand elle est visible à l’écran */
+let mbVidIO = null;
+function mbVidWatch() {
+  if (!('IntersectionObserver' in window)) return;
+  if (!mbVidIO) mbVidIO = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting && e.intersectionRatio >= .5 && !document.hidden) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause(); }), { threshold: [0, .5] });
+  document.querySelectorAll('video.mbvid:not([data-io])').forEach(v => { v.dataset.io = '1'; mbVidIO.observe(v); });
+}
+new MutationObserver(() => { if (document.querySelector('video.mbvid:not([data-io])')) mbVidWatch(); }).observe(document.documentElement, { childList: true, subtree: true });
+document.addEventListener('visibilitychange', () => { if (document.hidden) document.querySelectorAll('video.mbvid').forEach(v => v.pause()); else if (mbVidIO) document.querySelectorAll('video.mbvid').forEach(v => { mbVidIO.unobserve(v); mbVidIO.observe(v); }); });
 function mbWeekVisual(w, twins) {
+  if (!twins && MB_VID_READY.includes(w)) return `<figure class="mbvis"><video class="mbvid" poster="assets/pregnancy/webp/week-${pad(w)}.webp" muted loop playsinline preload="metadata" disablepictureinpicture aria-label="${esc(tr('Illustration indicative, semaine') + ' ' + w + ' SA')}"><source src="assets/pregnancy/video/week-${pad(w)}.mp4" type="video/mp4"><source src="assets/pregnancy/video/week-${pad(w)}.webm" type="video/webm"></video><figcaption>Illustration pédagogique, non diagnostique</figcaption></figure>`;
   const ok = twins ? MB_IMG_TWINS.includes(w) : MB_IMG_READY.includes(w);
   if (ok) { const f = `assets/pregnancy/webp/week-${pad(w)}${twins ? '-twins' : ''}.webp`; return `<figure class="mbvis"><img src="${f}" alt="${esc(tr('Illustration indicative, semaine') + ' ' + w + ' SA')}" loading="lazy" decoding="async" onerror="this.closest('.mbvis').outerHTML=mbBabySvgFig(${w},${twins ? 1 : 0})"><figcaption>Illustration pédagogique, non diagnostique</figcaption></figure>`; }
   /* illustration dessinée de la semaine réelle, jamais celle d’une autre semaine */
@@ -6793,7 +6804,7 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Mises à jour automatiques ===== */
-const APP_BUILD = '2026-10-25.2255';
+const APP_BUILD = '2026-10-25.2316';
 function updBar(show) {
   let b = document.getElementById('updbar');
   if (!show) { if (b) b.remove(); return; }
